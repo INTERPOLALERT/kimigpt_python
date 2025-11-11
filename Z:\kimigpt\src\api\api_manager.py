@@ -103,6 +103,46 @@ class APIManager:
                 'rate_limit': 100
             }
 
+        # Together AI (Most generous free tier!)
+        if api_keys.get('TOGETHER_API_KEY'):
+            self.apis['together'] = {
+                'key': api_keys['TOGETHER_API_KEY'],
+                'base_url': 'https://api.together.xyz/v1',
+                'models': ['mistralai/Mixtral-8x7B-Instruct-v0.1'],
+                'priority': 7,
+                'rate_limit': 1000
+            }
+
+        # Perplexity AI
+        if api_keys.get('PERPLEXITY_API_KEY'):
+            self.apis['perplexity'] = {
+                'key': api_keys['PERPLEXITY_API_KEY'],
+                'base_url': 'https://api.perplexity.ai',
+                'models': ['llama-3.1-sonar-small-128k-online'],
+                'priority': 8,
+                'rate_limit': 50
+            }
+
+        # Replicate
+        if api_keys.get('REPLICATE_API_KEY'):
+            self.apis['replicate'] = {
+                'key': api_keys['REPLICATE_API_KEY'],
+                'base_url': 'https://api.replicate.com/v1',
+                'models': ['meta/llama-2-70b-chat'],
+                'priority': 9,
+                'rate_limit': 100
+            }
+
+        # AI21 Labs
+        if api_keys.get('AI21_API_KEY'):
+            self.apis['ai21'] = {
+                'key': api_keys['AI21_API_KEY'],
+                'base_url': 'https://api.ai21.com/studio/v1',
+                'models': ['j2-mid'],
+                'priority': 10,
+                'rate_limit': 100
+            }
+
         # Initialize status tracking
         for api_name in self.apis:
             self.api_status[api_name] = APIStatus(
@@ -197,6 +237,14 @@ class APIManager:
                 response = self._call_openrouter(api_config, prompt, max_tokens)
             elif api_name == 'cohere':
                 response = self._call_cohere(api_config, prompt, max_tokens)
+            elif api_name == 'together':
+                response = self._call_together(api_config, prompt, max_tokens)
+            elif api_name == 'perplexity':
+                response = self._call_perplexity(api_config, prompt, max_tokens)
+            elif api_name == 'replicate':
+                response = self._call_replicate(api_config, prompt, max_tokens)
+            elif api_name == 'ai21':
+                response = self._call_ai21(api_config, prompt, max_tokens)
             else:
                 raise ValueError(f"Unknown API: {api_name}")
 
@@ -372,6 +420,119 @@ class APIManager:
             return response.json()['generations'][0]['text']
         else:
             raise Exception(f"Cohere API error: {response.status_code}")
+
+    def _call_together(self, api_config: Dict, prompt: str, max_tokens: int) -> str:
+        """Call Together AI API"""
+        headers = {
+            'Authorization': f'Bearer {api_config["key"]}',
+            'Content-Type': 'application/json'
+        }
+
+        data = {
+            'model': api_config['models'][0],
+            'messages': [{'role': 'user', 'content': prompt}],
+            'max_tokens': max_tokens,
+            'temperature': 0.7
+        }
+
+        response = requests.post(
+            f"{api_config['base_url']}/chat/completions",
+            headers=headers,
+            json=data,
+            timeout=60
+        )
+
+        if response.status_code == 200:
+            return response.json()['choices'][0]['message']['content']
+        else:
+            raise Exception(f"Together AI error: {response.status_code}")
+
+    def _call_perplexity(self, api_config: Dict, prompt: str, max_tokens: int) -> str:
+        """Call Perplexity API"""
+        headers = {
+            'Authorization': f'Bearer {api_config["key"]}',
+            'Content-Type': 'application/json'
+        }
+
+        data = {
+            'model': api_config['models'][0],
+            'messages': [{'role': 'user', 'content': prompt}],
+            'max_tokens': max_tokens
+        }
+
+        response = requests.post(
+            f"{api_config['base_url']}/chat/completions",
+            headers=headers,
+            json=data,
+            timeout=60
+        )
+
+        if response.status_code == 200:
+            return response.json()['choices'][0]['message']['content']
+        else:
+            raise Exception(f"Perplexity API error: {response.status_code}")
+
+    def _call_replicate(self, api_config: Dict, prompt: str, max_tokens: int) -> str:
+        """Call Replicate API"""
+        headers = {
+            'Authorization': f'Token {api_config["key"]}',
+            'Content-Type': 'application/json'
+        }
+
+        data = {
+            'version': 'meta/llama-2-70b-chat',
+            'input': {
+                'prompt': prompt,
+                'max_new_tokens': max_tokens,
+                'temperature': 0.7
+            }
+        }
+
+        response = requests.post(
+            f"{api_config['base_url']}/predictions",
+            headers=headers,
+            json=data,
+            timeout=60
+        )
+
+        if response.status_code == 201:
+            # Replicate is async, need to poll for result
+            prediction_url = response.json()['urls']['get']
+            import time
+            for _ in range(30):  # Wait up to 30 seconds
+                time.sleep(1)
+                result = requests.get(prediction_url, headers=headers)
+                if result.json()['status'] == 'succeeded':
+                    return ''.join(result.json()['output'])
+            raise Exception("Replicate timeout")
+        else:
+            raise Exception(f"Replicate API error: {response.status_code}")
+
+    def _call_ai21(self, api_config: Dict, prompt: str, max_tokens: int) -> str:
+        """Call AI21 Labs API"""
+        headers = {
+            'Authorization': f'Bearer {api_config["key"]}',
+            'Content-Type': 'application/json'
+        }
+
+        data = {
+            'prompt': prompt,
+            'maxTokens': max_tokens,
+            'temperature': 0.7,
+            'topP': 1.0
+        }
+
+        response = requests.post(
+            f"{api_config['base_url']}/{api_config['models'][0]}/complete",
+            headers=headers,
+            json=data,
+            timeout=60
+        )
+
+        if response.status_code == 200:
+            return response.json()['completions'][0]['data']['text']
+        else:
+            raise Exception(f"AI21 API error: {response.status_code}")
 
     def get_status(self) -> Dict[str, Any]:
         """Get current status of all APIs"""

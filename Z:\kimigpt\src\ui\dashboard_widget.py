@@ -51,19 +51,22 @@ class DashboardWidget(QWidget):
         # Title
         title = QLabel("Build Websites with AI Intelligence")
         title.setObjectName("sectionTitle")
-        title.setFont(QFont("Segoe UI", 32, QFont.Weight.Bold))
+        title.setFont(QFont("Segoe UI", 28, QFont.Weight.Bold))
         title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        title.setWordWrap(True)
+        title.setMaximumHeight(80)
 
         # Subtitle
         subtitle = QLabel(
-            "Revolutionary multi-agent AI system that creates professional, production-ready websites\n"
-            "from any input - text, images, audio, or video. Smart API rotation, real-time preview,\n"
+            "Revolutionary multi-agent AI system that creates professional, production-ready websites "
+            "from any input - text, images, audio, or video. Smart API rotation, real-time preview, "
             "and one-click deployment."
         )
         subtitle.setObjectName("sectionSubtitle")
-        subtitle.setFont(QFont("Segoe UI", 14))
+        subtitle.setFont(QFont("Segoe UI", 13))
         subtitle.setAlignment(Qt.AlignmentFlag.AlignCenter)
         subtitle.setWordWrap(True)
+        subtitle.setMaximumWidth(900)
 
         # Buttons
         button_layout = QHBoxLayout()
@@ -88,8 +91,14 @@ class DashboardWidget(QWidget):
         button_layout.addWidget(api_btn)
         button_layout.addStretch()
 
+        # Center subtitle in a horizontal layout
+        subtitle_container = QHBoxLayout()
+        subtitle_container.addStretch()
+        subtitle_container.addWidget(subtitle)
+        subtitle_container.addStretch()
+
         layout.addWidget(title)
-        layout.addWidget(subtitle)
+        layout.addLayout(subtitle_container)
         layout.addSpacing(20)
         layout.addLayout(button_layout)
 
@@ -106,7 +115,7 @@ class DashboardWidget(QWidget):
 
         stats = [
             ("🤖 AI Agents", "8", "Specialized Agents"),
-            ("🔗 API Providers", "8+", "AI Services"),
+            ("🔗 API Providers", "12+", "AI Services"),
             ("📁 Supported Formats", "10+", "File Types"),
             ("⚡ Generation Speed", "< 60s", "Average Time")
         ]
@@ -176,7 +185,7 @@ class DashboardWidget(QWidget):
 
         features = [
             ("🤖 Multi-Agent AI", "8 specialized AI agents work together for perfect results"),
-            ("🔄 Smart API Rotation", "Automatic failover across 8+ AI providers"),
+            ("🔄 Smart API Rotation", "Automatic failover across 12+ free AI providers"),
             ("🎨 Multi-Modal Input", "Text, images, videos, audio - any input works"),
             ("👀 Real-Time Preview", "Watch your website being built live"),
             ("⚡ Advanced Features", "PWA, accessibility, SEO optimization included"),

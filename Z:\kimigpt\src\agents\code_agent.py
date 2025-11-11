@@ -15,33 +15,84 @@ class CodeAgent:
         self.api_manager = api_manager
 
     async def generate_code(self, design_result: Dict[str, Any], content_result: Dict[str, Any], preferences: Dict[str, Any]) -> Dict[str, Any]:
-        """Generate website code"""
+        """Generate fully functional website code with JavaScript interactivity"""
 
         design_spec = design_result.get('design_specification', '')
         content = content_result.get('content', '')
         project_name = content_result.get('project_name', 'My Website')
         framework = preferences.get('framework', 'vanilla')
 
-        prompt = f"""Generate a complete, professional HTML5 website.
+        prompt = f"""Generate a COMPLETE, FULLY FUNCTIONAL, PRODUCTION-READY HTML5 website with embedded CSS and JavaScript.
 
-Design Specs:
+Design Specifications:
 {design_spec}
 
-Content:
+Content Requirements:
 {content}
 
-Requirements:
-- Single-page, fully responsive
-- Modern, clean design
-- Include proper meta tags
-- SEO-optimized
-- Embedded CSS and JavaScript
-- Professional and production-ready
+CRITICAL REQUIREMENTS - YOU MUST INCLUDE ALL OF THESE:
 
-Generate ONLY the HTML code, nothing else. Start with <!DOCTYPE html>"""
+1. STRUCTURE:
+   - Valid HTML5 with proper DOCTYPE
+   - Semantic HTML (header, nav, main, section, footer)
+   - Proper meta tags (viewport, description, keywords)
+   - Open Graph tags for social sharing
+
+2. INTERACTIVE COMPONENTS (REQUIRED):
+   - Navigation menu that highlights active section
+   - Smooth scroll navigation
+   - Contact form with FULL CLIENT-SIDE VALIDATION:
+     * Name field (required, min 2 characters)
+     * Email field (required, valid email format)
+     * Message field (required, min 10 characters)
+     * Submit button with loading state
+     * Success/error messages
+   - Modal/popup functionality with open/close
+   - Image gallery or carousel (if applicable)
+   - Animated elements on scroll (fade-in, slide-in)
+   - Hover effects on all interactive elements
+
+3. JAVASCRIPT FUNCTIONALITY (REQUIRED):
+   - Form validation with error messages
+   - Smooth scrolling for anchor links
+   - Mobile menu toggle
+   - Scroll-triggered animations
+   - Modal open/close functionality
+   - Active navigation highlighting on scroll
+   - Loading states for async operations
+   - localStorage for form data persistence (optional)
+
+4. STYLING (REQUIRED):
+   - Fully responsive (mobile-first approach)
+   - Modern CSS with flexbox/grid
+   - Beautiful gradients and shadows
+   - Animations and transitions
+   - Professional typography
+   - Accessible color contrast
+   - Loading animations
+   - Micro-interactions
+
+5. SECTIONS TO INCLUDE:
+   - Hero section with CTA button
+   - Features/Services section (cards layout)
+   - About/Portfolio section
+   - Gallery or showcase section
+   - Contact form section
+   - Footer with social links
+
+6. CODE QUALITY:
+   - Clean, well-commented code
+   - Organized CSS (variables for colors/spacing)
+   - Modular JavaScript functions
+   - No external dependencies (pure vanilla JS)
+   - Production-ready and bug-free
+
+Generate ONLY the complete HTML file with embedded CSS and JavaScript. Start with <!DOCTYPE html>.
+Make it IMPRESSIVE, INTERACTIVE, and FULLY FUNCTIONAL.
+"""
 
         try:
-            html_code = await self.api_manager.generate_text(prompt, 8000)
+            html_code = await self.api_manager.generate_text(prompt, 16000)
 
             # Clean up the response
             html_code = self._clean_code(html_code)
@@ -62,15 +113,15 @@ Generate ONLY the HTML code, nothing else. Start with <!DOCTYPE html>"""
             }
 
         except Exception as e:
-            # Use high-quality fallback template
+            # Use enhanced fallback template with full functionality
             return {
                 'success': True,
                 'files': {
-                    'index.html': self._get_fallback_html(project_name, content, design_result),
+                    'index.html': self._get_enhanced_fallback_html(project_name, content, design_result),
                     'README.md': self._generate_readme(project_name, preferences)
                 },
                 'framework': framework,
-                'note': f'Used fallback template: {str(e)}'
+                'note': f'Used enhanced fallback template: {str(e)}'
             }
 
     def _clean_code(self, code: str) -> str:
@@ -111,6 +162,167 @@ Simply upload all files to your web hosting provider or open index.html to previ
 
 ---
 Built with ❤️ by KimiGPT
+"""
+
+    def _get_enhanced_fallback_html(self, project_name: str, content: str, design_result: Dict) -> str:
+        """Enhanced fallback with FULL JavaScript interactivity"""
+        return self._get_fallback_html(project_name, content, design_result) + """
+    <!-- Enhanced JavaScript for Full Interactivity -->
+    <script>
+    // Contact Form Validation and Submission
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById('name');
+            const email = document.getElementById('email');
+            const message = document.getElementById('message');
+            const submitBtn = contactForm.querySelector('button[type="submit"]');
+            const formMessage = document.getElementById('form-message');
+
+            // Validation
+            let isValid = true;
+            let errors = [];
+
+            if (!name.value || name.value.trim().length < 2) {
+                errors.push('Name must be at least 2 characters');
+                name.style.borderColor = '#ef4444';
+                isValid = false;
+            } else {
+                name.style.borderColor = '#10b981';
+            }
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!email.value || !emailRegex.test(email.value)) {
+                errors.push('Please enter a valid email');
+                email.style.borderColor = '#ef4444';
+                isValid = false;
+            } else {
+                email.style.borderColor = '#10b981';
+            }
+
+            if (!message.value || message.value.trim().length < 10) {
+                errors.push('Message must be at least 10 characters');
+                message.style.borderColor = '#ef4444';
+                isValid = false;
+            } else {
+                message.style.borderColor = '#10b981';
+            }
+
+            if (!isValid) {
+                formMessage.textContent = errors.join('. ');
+                formMessage.style.color = '#ef4444';
+                formMessage.style.display = 'block';
+                return;
+            }
+
+            // Simulate form submission
+            submitBtn.textContent = 'Sending...';
+            submitBtn.disabled = true;
+
+            await new Promise(resolve => setTimeout(resolve, 1500));
+
+            formMessage.textContent = '✅ Message sent successfully! We\\'ll get back to you soon.';
+            formMessage.style.color = '#10b981';
+            formMessage.style.display = 'block';
+            contactForm.reset();
+
+            submitBtn.textContent = 'Send Message';
+            submitBtn.disabled = false;
+
+            setTimeout(() => {
+                formMessage.style.display = 'none';
+            }, 5000);
+        });
+
+        // Real-time validation
+        document.getElementById('name')?.addEventListener('blur', function() {
+            if (this.value.trim().length >= 2) {
+                this.style.borderColor = '#10b981';
+            }
+        });
+
+        document.getElementById('email')?.addEventListener('blur', function() {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (emailRegex.test(this.value)) {
+                this.style.borderColor = '#10b981';
+            }
+        });
+    }
+
+    // Modal Functionality
+    function openModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    function closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    }
+
+    // Mobile Menu Toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    if (mobileMenuBtn && mobileMenu) {
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+        });
+    }
+
+    // Active Section Highlighting
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('nav a[href^="#"]');
+
+    function highlightNav() {
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            if (window.pageYOffset >= sectionTop - 200) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${current}`) {
+                link.classList.add('active');
+            }
+        });
+    }
+
+    window.addEventListener('scroll', highlightNav);
+
+    // Newsletter Signup
+    const newsletterForm = document.getElementById('newsletter-form');
+    if (newsletterForm) {
+        newsletterForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const emailInput = newsletterForm.querySelector('input[type="email"]');
+            const button = newsletterForm.querySelector('button');
+
+            if (emailInput.value) {
+                button.textContent = 'Subscribing...';
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                button.textContent = '✓ Subscribed!';
+                button.style.background = '#10b981';
+                emailInput.value = '';
+                setTimeout(() => {
+                    button.textContent = 'Subscribe';
+                    button.style.background = '';
+                }, 3000);
+            }
+        });
+    }
+    </script>
 """
 
     def _get_fallback_html(self, project_name: str, content: str, design_result: Dict) -> str:
@@ -388,9 +600,57 @@ Built with ❤️ by KimiGPT
         </div>
     </div>
 
+    <!-- Contact Form Section -->
+    <section id="contact" style="background: #f8f9fa; padding: 80px 20px;">
+        <div class="container">
+            <h2 class="section-title">Get In Touch</h2>
+            <p style="text-align: center; color: #64748b; margin-bottom: 50px; font-size: 1.1em;">
+                Have a question or want to work together? Drop us a message!
+            </p>
+
+            <form id="contact-form" style="max-width: 600px; margin: 0 auto; background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                <div style="margin-bottom: 25px;">
+                    <label for="name" style="display: block; margin-bottom: 8px; font-weight: 600; color: #1a202c;">Name *</label>
+                    <input type="text" id="name" name="name" required
+                        style="width: 100%; padding: 12px 15px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 16px; transition: border-color 0.3s;"
+                        placeholder="Your name">
+                </div>
+
+                <div style="margin-bottom: 25px;">
+                    <label for="email" style="display: block; margin-bottom: 8px; font-weight: 600; color: #1a202c;">Email *</label>
+                    <input type="email" id="email" name="email" required
+                        style="width: 100%; padding: 12px 15px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 16px; transition: border-color 0.3s;"
+                        placeholder="your.email@example.com">
+                </div>
+
+                <div style="margin-bottom: 25px;">
+                    <label for="message" style="display: block; margin-bottom: 8px; font-weight: 600; color: #1a202c;">Message *</label>
+                    <textarea id="message" name="message" required rows="5"
+                        style="width: 100%; padding: 12px 15px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 16px; transition: border-color 0.3s; resize: vertical;"
+                        placeholder="Your message here..."></textarea>
+                </div>
+
+                <div id="form-message" style="display: none; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-weight: 500;"></div>
+
+                <button type="submit"
+                    style="width: 100%; padding: 15px; background: linear-gradient(135deg, {color_set['primary']}, {color_set['secondary']}); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: transform 0.3s, box-shadow 0.3s;"
+                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 10px 25px rgba(0,0,0,0.2)';"
+                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+                    Send Message
+                </button>
+            </form>
+        </div>
+    </section>
+
     <footer>
         <h3>{project_name}</h3>
         <p>Built with modern web technologies</p>
+        <div style="margin: 20px 0;">
+            <a href="#" style="color: white; margin: 0 10px; text-decoration: none; font-size: 24px;">📘</a>
+            <a href="#" style="color: white; margin: 0 10px; text-decoration: none; font-size: 24px;">🐦</a>
+            <a href="#" style="color: white; margin: 0 10px; text-decoration: none; font-size: 24px;">📷</a>
+            <a href="#" style="color: white; margin: 0 10px; text-decoration: none; font-size: 24px;">💼</a>
+        </div>
         <p>&copy; {datetime.now().year} {project_name}. All rights reserved.</p>
         <p style="opacity: 0.6; margin-top: 20px; font-size: 0.9em;">Generated by KimiGPT - AI Website Builder</p>
     </footer>

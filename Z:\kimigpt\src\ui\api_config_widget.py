@@ -132,6 +132,34 @@ class APIConfigWidget(QWidget):
                 "url": "https://cloudinary.com/users/register/free",
                 "description": "Your Cloudinary API secret (find in dashboard).",
                 "emoji": "🔐"
+            },
+            {
+                "name": "Together AI",
+                "key": "TOGETHER_API_KEY",
+                "url": "https://api.together.xyz/signup",
+                "description": "Ultra-fast inference with 100M+ tokens/month free tier (most generous!).",
+                "emoji": "🚀"
+            },
+            {
+                "name": "Perplexity AI",
+                "key": "PERPLEXITY_API_KEY",
+                "url": "https://www.perplexity.ai/settings/api",
+                "description": "Real-time web search AI. Free tier: $5 credit for new users.",
+                "emoji": "🔍"
+            },
+            {
+                "name": "Replicate",
+                "key": "REPLICATE_API_KEY",
+                "url": "https://replicate.com/account/api-tokens",
+                "description": "Run open-source models. Free tier: Limited free credits monthly.",
+                "emoji": "🔁"
+            },
+            {
+                "name": "AI21 Labs",
+                "key": "AI21_API_KEY",
+                "url": "https://studio.ai21.com/account/api-key",
+                "description": "Jurassic models for text generation. Free tier: 10,000 tokens/day.",
+                "emoji": "🧠"
             }
         ]
 
