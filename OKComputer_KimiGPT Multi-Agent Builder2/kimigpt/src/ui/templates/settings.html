@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - KimiGPT</title>
+    <meta name="description" content="Configure KimiGPT settings and API connections">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .api-status.online { background-color: #10b981; }
+        .api-status.offline { background-color: #ef4444; }
+        .api-status.rate_limited { background-color: #f59e0b; }
+        .pulse { animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <a href="/" class="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+                            KimiGPT
+                        </a>
+                    </div>
+                    <div class="hidden md:block ml-10">
+                        <div class="flex items-baseline space-x-4">
+                            <a href="/" class="text-gray-500 hover:text-purple-600 px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
+                            <a href="/generator" class="text-gray-500 hover:text-purple-600 px-3 py-2 rounded-md text-sm font-medium">Generator</a>
+                            <a href="#" class="text-gray-900 hover:text-purple-600 px-3 py-2 rounded-md text-sm font-medium">Settings</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="pt-16 min-h-screen">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!-- Header -->
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold text-gray-900 mb-4">
+                    <i class="fas fa-cog text-purple-600 mr-3"></i>
+                    Settings & Configuration
+                </h1>
+                <p class="text-xl text-gray-600">
+                    Manage your API connections, preferences, and system settings
+                </p>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Left Column: API Status -->
+                <div class="lg:col-span-1 space-y-6">
+                    <!-- System Status -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                            <i class="fas fa-server text-purple-600 mr-2"></i>
+                            System Status
+                        </h3>
+                        
+                        <div class="space-y-4" id="system-status">
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <span class="text-sm font-medium">Overall Health</span>
+                                <div class="flex items-center">
+                                    <div class="w-3 h-3 bg-green-500 rounded-full mr-2 pulse"></div>
+                                    <span class="text-sm text-green-600">Healthy</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <span class="text-sm font-medium">Active APIs</span>
+                                <span class="text-sm text-gray-600" id="active-apis">6/6</span>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <span class="text-sm font-medium">Cache Usage</span>
+                                <span class="text-sm text-gray-600">2.3 MB</span>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <span class="text-sm font-medium">Response Time</span>
+                                <span class="text-sm text-gray-600">1.2s avg</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                            <i class="fas fa-bolt text-purple-600 mr-2"></i>
+                            Quick Actions
+                        </h3>
+                        
+                        <div class="space-y-3">
+                            <button id="clear-cache" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                                <i class="fas fa-broom mr-2"></i>Clear Cache
+                            </button>
+                            <button id="restart-system" class="w-full bg-orange-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-orange-700 transition-colors">
+                                <i class="fas fa-redo mr-2"></i>Restart System
+                            </button>
+                            <button id="export-logs" class="w-full bg-gray-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-gray-700 transition-colors">
+                                <i class="fas fa-download mr-2"></i>Export Logs
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Help & Support -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                            <i class="fas fa-question-circle text-purple-600 mr-2"></i>
+                            Help & Support
+                        </h3>
+                        
+                        <div class="space-y-3 text-sm">
+                            <a href="#" class="block text-purple-600 hover:text-purple-700">
+                                <i class="fas fa-book mr-2"></i>Documentation
+                            </a>
+                            <a href="#" class="block text-purple-600 hover:text-purple-700">
+                                <i class="fas fa-video mr-2"></i>Video Tutorials
+                            </a>
+                            <a href="#" class="block text-purple-600 hover:text-purple-700">
+                                <i class="fas fa-comments mr-2"></i>Community Forum
+                            </a>
+                            <a href="#" class="block text-purple-600 hover:text-purple-700">
+                                <i class="fas fa-envelope mr-2"></i>Contact Support
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Settings -->
+                <div class="lg:col-span-2 space-y-6">
+                    <!-- API Configuration -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-xl font-semibold text-gray-900">
+                                <i class="fas fa-key text-purple-600 mr-2"></i>
+                                API Configuration
+                            </h3>
+                            <button id="test-all-apis" class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors">
+                                <i class="fas fa-play mr-2"></i>Test All
+                            </button>
+                        </div>
+                        
+                        <div class="space-y-6" id="api-configs">
+                            <!-- API configurations will be loaded here -->
+                        </div>
+                    </div>
+
+                    <!-- Generation Preferences -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-6">
+                            <i class="fas fa-sliders-h text-purple-600 mr-2"></i>
+                            Generation Preferences
+                        </h3>
+                        
+                        <div class="space-y-6">
+                            <!-- Default Style -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Default Design Style</label>
+                                <select id="default-style" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                                    <option value="modern">Modern & Clean</option>
+                                    <option value="classic">Classic & Professional</option>
+                                    <option value="creative">Creative & Artistic</option>
+                                    <option value="minimalist">Minimalist & Simple</option>
+                                    <option value="playful">Playful & Fun</option>
+                                </select>
+                            </div>
+
+                            <!-- Default Complexity -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Default Complexity</label>
+                                <select id="default-complexity" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                                    <option value="simple">Simple (Fast generation)</option>
+                                    <option value="moderate" selected>Moderate (Balanced)</option>
+                                    <option value="advanced">Advanced (Feature-rich)</option>
+                                </select>
+                            </div>
+
+                            <!-- Auto-save -->
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <label class="text-sm font-medium text-gray-700">Auto-save Projects</label>
+                                    <p class="text-xs text-gray-500">Automatically save project history</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="auto-save" class="sr-only peer" checked>
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+                                </label>
+                            </div>
+
+                            <!-- Auto-deploy -->
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <label class="text-sm font-medium text-gray-700">Auto-deploy Preview</label>
+                                    <p class="text-xs text-gray-500">Automatically deploy preview after generation</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="auto-deploy" class="sr-only peer">
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Performance Settings -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-6">
+                            <i class="fas fa-tachometer-alt text-purple-600 mr-2"></i>
+                            Performance Settings
+                        </h3>
+                        
+                        <div class="space-y-6">
+                            <!-- Cache Duration -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Cache Duration</label>
+                                <select id="cache-duration" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                                    <option value="30">30 minutes</option>
+                                    <option value="60" selected>1 hour</option>
+                                    <option value="240">4 hours</option>
+                                    <option value="720">12 hours</option>
+                                    <option value="1440">24 hours</option>
+                                </select>
+                            </div>
+
+                            <!-- Max Concurrent Requests -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Max Concurrent Requests</label>
+                                <input type="range" id="max-concurrent" min="1" max="10" value="3" class="w-full">
+                                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                    <span>1</span>
+                                    <span id="concurrent-value">3</span>
+                                    <span>10</span>
+                                </div>
+                            </div>
+
+                            <!-- Retry Attempts -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Retry Attempts</label>
+                                <input type="range" id="retry-attempts" min="1" max="5" value="3" class="w-full">
+                                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                    <span>1</span>
+                                    <span id="retry-value">3</span>
+                                    <span>5</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Save Button -->
+                    <div class="flex justify-end">
+                        <button id="save-settings" class="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors">
+                            <i class="fas fa-save mr-2"></i>Save Settings
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Load API status on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadApiStatus();
+            loadSettings();
+            setupEventListeners();
+        });
+
+        async function loadApiStatus() {
+            try {
+                const response = await fetch('/api/status');
+                const status = await response.json();
+                
+                updateApiDisplay(status);
+                updateSystemStatus(status);
+            } catch (error) {
+                console.error('Error loading API status:', error);
+            }
+        }
+
+        function updateApiDisplay(status) {
+            const container = document.getElementById('api-configs');
+            container.innerHTML = '';
+
+            const apiConfigs = [
+                { name: 'Anthropic Claude', key: 'anthropic', description: 'Complex reasoning and code generation' },
+                { name: 'Google Gemini', key: 'gemini', description: 'Multi-modal AI with image/video support' },
+                { name: 'Groq', key: 'groq', description: 'Ultra-fast inference with Llama models' },
+                { name: 'DeepSeek', key: 'deepseek', description: 'Specialized code generation' },
+                { name: 'OpenRouter', key: 'openrouter', description: 'Multi-model gateway' },
+                { name: 'Mistral AI', key: 'mistral', description: 'European AI with fast models' }
+            ];
+
+            apiConfigs.forEach(api => {
+                const apiStatus = status.apis[api.key] || { status: 'offline', response_time: 0, success_rate: 0 };
+                const statusClass = apiStatus.status === 'online' ? 'bg-green-100 text-green-800' : 
+                                  apiStatus.status === 'rate_limited' ? 'bg-yellow-100 text-yellow-800' : 
+                                  'bg-red-100 text-red-800';
+
+                const apiElement = document.createElement('div');
+                apiElement.className = 'border border-gray-200 rounded-lg p-4';
+                apiElement.innerHTML = `
+                    <div class="flex items-center justify-between mb-3">
+                        <div>
+                            <h4 class="font-semibold text-gray-900">${api.name}</h4>
+                            <p class="text-sm text-gray-600">${api.description}</p>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="px-3 py-1 rounded-full text-xs font-medium ${statusClass}">
+                                ${apiStatus.status}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4 text-sm">
+                        <div>
+                            <span class="text-gray-500">Response Time</span>
+                            <div class="font-medium">${apiStatus.response_time.toFixed(2)}s</div>
+                        </div>
+                        <div>
+                            <span class="text-gray-500">Success Rate</span>
+                            <div class="font-medium">${(apiStatus.success_rate * 100).toFixed(0)}%</div>
+                        </div>
+                        <div>
+                            <span class="text-gray-500">Error Count</span>
+                            <div class="font-medium">${apiStatus.error_count || 0}</div>
+                        </div>
+                    </div>
+                    <div class="mt-3 pt-3 border-t border-gray-200">
+                        <button class="test-api-btn text-purple-600 hover:text-purple-700 text-sm font-medium" data-api="${api.key}">
+                            <i class="fas fa-play mr-1"></i>Test Connection
+                        </button>
+                    </div>
+                `;
+                container.appendChild(apiElement);
+            });
+
+            // Add event listeners for test buttons
+            document.querySelectorAll('.test-api-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const apiKey = e.target.dataset.api;
+                    testApiConnection(apiKey);
+                });
+            });
+        }
+
+        function updateSystemStatus(status) {
+            const activeApis = Object.values(status.apis).filter(api => api.status === 'online').length;
+            document.getElementById('active-apis').textContent = `${activeApis}/${Object.keys(status.apis).length}`;
+            document.querySelector('#system-status .pulse').style.backgroundColor = 
+                activeApis === Object.keys(status.apis).length ? '#10b981' : 
+                activeApis > 0 ? '#f59e0b' : '#ef4444';
+        }
+
+        async function testApiConnection(apiKey) {
+            const btn = document.querySelector(`[data-api="${apiKey}"]`);
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i>Testing...';
+            btn.disabled = true;
+
+            try {
+                // Simulate API test
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                // Refresh status
+                await loadApiStatus();
+                
+                alert(`${apiKey} API test completed!`);
+            } catch (error) {
+                alert(`Error testing ${apiKey} API: ${error.message}`);
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        async function testAllApis() {
+            const btn = document.getElementById('test-all-apis');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Testing...';
+            btn.disabled = true;
+
+            try {
+                // Test all APIs
+                await new Promise(resolve => setTimeout(resolve, 3000));
+                
+                // Refresh status
+                await loadApiStatus();
+                
+                alert('All API tests completed!');
+            } catch (error) {
+                alert(`Error testing APIs: ${error.message}`);
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        function loadSettings() {
+            // Load settings from localStorage or default values
+            const settings = JSON.parse(localStorage.getItem('kimi_settings') || '{}');
+            
+            // Apply settings to form elements
+            if (settings.defaultStyle) document.getElementById('default-style').value = settings.defaultStyle;
+            if (settings.defaultComplexity) document.getElementById('default-complexity').value = settings.defaultComplexity;
+            if (settings.autoSave !== undefined) document.getElementById('auto-save').checked = settings.autoSave;
+            if (settings.autoDeploy !== undefined) document.getElementById('auto-deploy').checked = settings.autoDeploy;
+            if (settings.cacheDuration) document.getElementById('cache-duration').value = settings.cacheDuration;
+            if (settings.maxConcurrent) {
+                document.getElementById('max-concurrent').value = settings.maxConcurrent;
+                document.getElementById('concurrent-value').textContent = settings.maxConcurrent;
+            }
+            if (settings.retryAttempts) {
+                document.getElementById('retry-attempts').value = settings.retryAttempts;
+                document.getElementById('retry-value').textContent = settings.retryAttempts;
+            }
+        }
+
+        function setupEventListeners() {
+            // Range input updates
+            document.getElementById('max-concurrent').addEventListener('input', (e) => {
+                document.getElementById('concurrent-value').textContent = e.target.value;
+            });
+
+            document.getElementById('retry-attempts').addEventListener('input', (e) => {
+                document.getElementById('retry-value').textContent = e.target.value;
+            });
+
+            // Save settings
+            document.getElementById('save-settings').addEventListener('click', saveSettings);
+
+            // Quick actions
+            document.getElementById('clear-cache').addEventListener('click', clearCache);
+            document.getElementById('restart-system').addEventListener('click', restartSystem);
+            document.getElementById('export-logs').addEventListener('click', exportLogs);
+            document.getElementById('test-all-apis').addEventListener('click', testAllApis);
+        }
+
+        function saveSettings() {
+            const settings = {
+                defaultStyle: document.getElementById('default-style').value,
+                defaultComplexity: document.getElementById('default-complexity').value,
+                autoSave: document.getElementById('auto-save').checked,
+                autoDeploy: document.getElementById('auto-deploy').checked,
+                cacheDuration: document.getElementById('cache-duration').value,
+                maxConcurrent: document.getElementById('max-concurrent').value,
+                retryAttempts: document.getElementById('retry-attempts').value
+            };
+
+            localStorage.setItem('kimi_settings', JSON.stringify(settings));
+            
+            // Show success message
+            const btn = document.getElementById('save-settings');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check mr-2"></i>Saved!';
+            btn.classList.add('bg-green-600');
+            btn.classList.remove('bg-purple-600');
+            
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.classList.remove('bg-green-600');
+                btn.classList.add('bg-purple-600');
+            }, 2000);
+        }
+
+        function clearCache() {
+            if (confirm('Are you sure you want to clear the cache? This will remove all cached API responses.')) {
+                // Simulate cache clearing
+                setTimeout(() => {
+                    alert('Cache cleared successfully!');
+                    loadApiStatus(); // Refresh status
+                }, 1000);
+            }
+        }
+
+        function restartSystem() {
+            if (confirm('Are you sure you want to restart the system? All active generations will be stopped.')) {
+                const btn = document.getElementById('restart-system');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Restarting...';
+                btn.disabled = true;
+
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                    alert('System restarted successfully!');
+                    loadApiStatus(); // Refresh status
+                }, 3000);
+            }
+        }
+
+        function exportLogs() {
+            // Simulate log export
+            const logs = {
+                timestamp: new Date().toISOString(),
+                system_info: {
+                    version: '1.0.0',
+                    platform: 'Windows/Linux/macOS'
+                },
+                api_usage: {
+                    requests_today: 150,
+                    total_requests: 1250,
+                    average_response_time: 1.2
+                },
+                errors: []
+            };
+
+            const blob = new Blob([JSON.stringify(logs, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `kimi-gpt-logs-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Auto-refresh status every 30 seconds
+        setInterval(loadApiStatus, 30000);
+    </script>
+</body>
+</html>

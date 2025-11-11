@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KimiGPT - Multi-Agent AI Website Builder</title>
+    <meta name="description" content="Revolutionary AI-powered website builder with multi-agent architecture">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom Styles -->
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        .gradient-text { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-8px); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
+        .feature-icon { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .pulse-animation { animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        .typing-animation { border-right: 2px solid #667eea; animation: typing 1s steps(20), blink 0.5s step-end infinite alternate; }
+        @keyframes typing { from { width: 0; } to { width: 100%; } }
+        @keyframes blink { 50% { border-color: transparent; } }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-2xl font-bold gradient-text">KimiGPT</h1>
+                    </div>
+                    <div class="hidden md:block ml-10">
+                        <div class="flex items-baseline space-x-4">
+                            <a href="#" class="text-gray-900 hover:text-purple-600 px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
+                            <a href="/generator" class="text-gray-500 hover:text-purple-600 px-3 py-2 rounded-md text-sm font-medium">Generator</a>
+                            <a href="/settings" class="text-gray-500 hover:text-purple-600 px-3 py-2 rounded-md text-sm font-medium">Settings</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-4 flex items-center md:ml-6">
+                        <button class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
+                            <i class="fas fa-rocket mr-2"></i>Generate Website
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-bg pt-16 pb-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h1 class="text-5xl md:text-6xl font-bold text-white mb-6">
+                    Build Websites with
+                    <span class="block typing-animation">AI Intelligence</span>
+                </h1>
+                <p class="text-xl text-purple-100 mb-8 max-w-3xl mx-auto">
+                    Revolutionary multi-agent AI system that creates professional, production-ready websites 
+                    from any input - text, images, audio, or video. Smart API rotation, real-time preview, 
+                    and one-click deployment.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="/generator" class="bg-white text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+                        <i class="fas fa-magic mr-2"></i>Start Building
+                    </a>
+                    <button class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-purple-600 transition-colors">
+                        <i class="fas fa-play mr-2"></i>Watch Demo
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Why Choose KimiGPT?</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Experience the future of web development with our revolutionary AI-powered platform
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1: Multi-Agent Architecture -->
+                <div class="bg-white rounded-xl shadow-lg p-8 card-hover border border-gray-100">
+                    <div class="feature-icon w-16 h-16 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-robot text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Multi-Agent AI</h3>
+                    <p class="text-gray-600 mb-4">
+                        8 specialized AI agents work together: Understanding, Design, Code Generation, 
+                        Image Processing, Content, Quality Assurance, and Deployment.
+                    </p>
+                    <ul class="text-sm text-gray-500 space-y-2">
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Intelligent task distribution</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Specialized expertise per agent</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Coordinated workflow</li>
+                    </ul>
+                </div>
+
+                <!-- Feature 2: Smart API Rotation -->
+                <div class="bg-white rounded-xl shadow-lg p-8 card-hover border border-gray-100">
+                    <div class="feature-icon w-16 h-16 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-sync-alt text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Smart API Rotation</h3>
+                    <p class="text-gray-600 mb-4">
+                        Intelligent failover system across 6+ AI providers with real-time monitoring, 
+                        automatic retry logic, and load balancing.
+                    </p>
+                    <ul class="text-sm text-gray-500 space-y-2">
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Anthropic Claude API</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Google Gemini API</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Groq, DeepSeek, OpenRouter</li>
+                    </ul>
+                </div>
+
+                <!-- Feature 3: Multi-Modal Input -->
+                <div class="bg-white rounded-xl shadow-lg p-8 card-hover border border-gray-100">
+                    <div class="feature-icon w-16 h-16 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-images text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Multi-Modal Input</h3>
+                    <p class="text-gray-600 mb-4">
+                        Generate websites from any input type: text prompts, reference images, 
+                        videos, audio commands, or design files.
+                    </p>
+                    <ul class="text-sm text-gray-500 space-y-2">
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Images (.jpg, .png, .gif, .webp)</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Videos (.mp4, .webm, .mov)</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Audio (.mp3, .wav) for voice commands</li>
+                    </ul>
+                </div>
+
+                <!-- Feature 4: Real-Time Preview -->
+                <div class="bg-white rounded-xl shadow-lg p-8 card-hover border border-gray-100">
+                    <div class="feature-icon w-16 h-16 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-eye text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Real-Time Preview</h3>
+                    <p class="text-gray-600 mb-4">
+                        Watch your website come to life with live preview, multi-device testing, 
+                        and instant feedback as agents work.
+                    </p>
+                    <ul class="text-sm text-gray-500 space-y-2">
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Live generation preview</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Multi-device testing</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Interactive preview mode</li>
+                    </ul>
+                </div>
+
+                <!-- Feature 5: Advanced Features -->
+                <div class="bg-white rounded-xl shadow-lg p-8 card-hover border border-gray-100">
+                    <div class="feature-icon w-16 h-16 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-cogs text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Advanced Features</h3>
+                    <p class="text-gray-600 mb-4">
+                        PWA capabilities, advanced animations, performance optimization, 
+                        accessibility compliance, and security best practices.
+                    </p>
+                    <ul class="text-sm text-gray-500 space-y-2">
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Progressive Web App features</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>WCAG AA accessibility</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Lighthouse 90+ score</li>
+                    </ul>
+                </div>
+
+                <!-- Feature 6: One-Click Deployment -->
+                <div class="bg-white rounded-xl shadow-lg p-8 card-hover border border-gray-100">
+                    <div class="feature-icon w-16 h-16 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-rocket text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">One-Click Deployment</h3>
+                    <p class="text-gray-600 mb-4">
+                        Deploy to multiple platforms instantly with optimized packages, 
+                        automated setup guides, and hosting recommendations.
+                    </p>
+                    <ul class="text-sm text-gray-500 space-y-2">
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Netlify, Vercel, GitHub Pages</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Automated deployment guides</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Performance optimization</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">How It Works</h2>
+                <p class="text-xl text-gray-600">
+                    From idea to live website in 4 simple steps
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Step 1 -->
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <span class="text-2xl font-bold text-white">1</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Describe Your Vision</h3>
+                    <p class="text-gray-600">
+                        Enter a text prompt, upload images, or provide any input that describes 
+                        the website you want to create.
+                    </p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <span class="text-2xl font-bold text-white">2</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">AI Agents Collaborate</h3>
+                    <p class="text-gray-600">
+                        Our 8 specialized AI agents work together, each handling their 
+                        expertise area to create your perfect website.
+                    </p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <span class="text-2xl font-bold text-white">3</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Preview & Refine</h3>
+                    <p class="text-gray-600">
+                        Watch your website being built in real-time. Preview on different 
+                        devices and make adjustments as needed.
+                    </p>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <span class="text-2xl font-bold text-white">4</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Deploy & Go Live</h3>
+                    <p class="text-gray-600">
+                        One-click deployment to your preferred platform. Your website 
+                        is now live and ready for the world!
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistics Section -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8 text-center">
+                <div>
+                    <div class="text-4xl font-bold text-purple-600 mb-2 pulse-animation">50+</div>
+                    <div class="text-gray-600">Websites Generated</div>
+                </div>
+                <div>
+                    <div class="text-4xl font-bold text-purple-600 mb-2 pulse-animation">8</div>
+                    <div class="text-gray-600">AI Agents</div>
+                </div>
+                <div>
+                    <div class="text-4xl font-bold text-purple-600 mb-2 pulse-animation">6+</div>
+                    <div class="text-gray-600">AI Providers</div>
+                </div>
+                <div>
+                    <div class="text-4xl font-bold text-purple-600 mb-2 pulse-animation">24/7</div>
+                    <div class="text-gray-600">Support</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 hero-bg">
+        <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl font-bold text-white mb-6">
+                Ready to Build Your Dream Website?
+            </h2>
+            <p class="text-xl text-purple-100 mb-8">
+                Join thousands of users who have already created amazing websites with AI
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="/generator" class="bg-white text-purple-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors">
+                    <i class="fas fa-rocket mr-2"></i>Start Building Now
+                </a>
+                <button class="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-purple-600 transition-colors">
+                    <i class="fas fa-book mr-2"></i>View Examples
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="mb-8">
+                    <h3 class="text-2xl font-bold gradient-text mb-4">KimiGPT</h3>
+                    <p class="text-gray-400 max-w-2xl mx-auto">
+                        Revolutionary multi-agent AI website builder that transforms your ideas into 
+                        professional websites with intelligent automation and cutting-edge technology.
+                    </p>
+                </div>
+                
+                <div class="border-t border-gray-800 pt-8">
+                    <p class="text-gray-400">
+                        © 2024 KimiGPT. Built with passion for the future of web development.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Add scroll effect to navigation
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 100) {
+                nav.classList.add('shadow-xl');
+            } else {
+                nav.classList.remove('shadow-xl');
+            }
+        });
+
+        // Animate elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all cards and sections
+        document.querySelectorAll('.card-hover, section').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease-out';
+            observer.observe(el);
+        });
+
+        // Typing animation for hero title
+        const typingElement = document.querySelector('.typing-animation');
+        if (typingElement) {
+            const text = typingElement.textContent;
+            typingElement.textContent = '';
+            
+            let i = 0;
+            const typeWriter = () => {
+                if (i < text.length) {
+                    typingElement.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, 100);
+                }
+            };
+            
+            setTimeout(typeWriter, 1000);
+        }
+    </script>
+</body>
+</html>

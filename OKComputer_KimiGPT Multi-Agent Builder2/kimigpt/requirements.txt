@@ -1,0 +1,53 @@
+# Core Framework
+flask==3.0.0
+fastapi==0.104.1
+uvicorn==0.24.0
+
+# AI APIs
+anthropic==0.7.0
+google-generativeai==0.3.0
+groq==0.4.0
+openai==1.3.0
+mistralai==0.0.11
+
+# Image Processing
+Pillow==10.1.0
+opencv-python==4.8.1
+imageio==2.31.6
+
+# Video Processing
+moviepy==1.0.3
+
+# Audio Processing
+SpeechRecognition==3.10.0
+pydub==0.25.1
+openai-whisper==20231117
+
+# Document Processing
+PyPDF2==3.0.1
+python-docx==1.1.0
+python-pptx==0.6.23
+
+# Web Scraping & Testing
+beautifulsoup4==4.12.2
+selenium==4.15.0
+lighthouse==0.1.2
+
+# Database
+sqlalchemy==2.0.23
+
+# Utilities
+python-dotenv==1.0.0
+requests==2.31.0
+pyyaml==6.0.1
+rich==13.7.0  # Beautiful console output
+
+# Security
+python-clamav==0.1.4  # Malware scanning
+
+# Deployment
+gitpython==3.1.40  # GitHub integration
+paramiko==3.3.1    # FTP/SFTP
+
+# Testing
+pytest==7.4.3
