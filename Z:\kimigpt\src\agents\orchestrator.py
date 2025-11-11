@@ -1,12 +1,11 @@
 """
-Orchestrator Agent for KimiGPT
+Orchestrator Agent for KimiGPT - FIXED VERSION
 Coordinates all other agents to generate websites
 """
 
 import asyncio
 from typing import Dict, Any, Optional, Callable
 from datetime import datetime
-import os
 import json
 from pathlib import Path
 
@@ -60,92 +59,102 @@ class OrchestratorAgent:
                 'steps': []
             }
 
-            # Step 1: Understanding Phase (15-20%)
-            if progress_callback:
-                progress_callback(15, "🧠 Understanding your requirements...")
-            if agent_callback:
-                agent_callback("Understanding", "Processing")
-
+            # Step 1: Understanding Phase (10-25%)
             try:
+                if progress_callback:
+                    progress_callback(10, "🧠 Understanding your requirements...")
+                if agent_callback:
+                    agent_callback("Understanding", "Processing")
+
                 understanding_result = await self.understanding_agent.analyze(input_data)
                 result['steps'].append({
                     'agent': 'understanding',
-                    'result': understanding_result,
                     'success': understanding_result.get('success', False)
                 })
 
                 if agent_callback:
                     agent_callback("Understanding", "Complete ✓")
+
+                if progress_callback:
+                    progress_callback(25, "Understanding complete")
+
             except Exception as e:
-                if agent_callback:
-                    agent_callback("Understanding", f"Error: {str(e)}")
+                print(f"Understanding error: {e}")
                 understanding_result = {
                     'success': False,
                     'error': str(e),
+                    'fallback_analysis': 'Create a professional website',
                     'raw_prompt': input_data.get('prompt', '')
                 }
 
-            # Step 2: Design Phase (30-40%)
-            if progress_callback:
-                progress_callback(30, "🎨 Creating design specifications...")
-            if agent_callback:
-                agent_callback("Design", "Processing")
-
+            # Step 2: Design Phase (25-40%)
             try:
+                if progress_callback:
+                    progress_callback(30, "🎨 Creating design specifications...")
+                if agent_callback:
+                    agent_callback("Design", "Processing")
+
                 design_result = await self.design_agent.create_design(
                     understanding_result,
                     input_data.get('preferences', {})
                 )
                 result['steps'].append({
                     'agent': 'design',
-                    'result': design_result,
                     'success': design_result.get('success', False)
                 })
 
                 if agent_callback:
                     agent_callback("Design", "Complete ✓")
+
+                if progress_callback:
+                    progress_callback(40, "Design complete")
+
             except Exception as e:
-                if agent_callback:
-                    agent_callback("Design", f"Error: {str(e)}")
+                print(f"Design error: {e}")
                 design_result = {
                     'success': False,
-                    'error': str(e)
+                    'error': str(e),
+                    'design_specification': 'Modern, clean design with responsive layout'
                 }
 
-            # Step 3: Content Generation (45-55%)
-            if progress_callback:
-                progress_callback(45, "📝 Generating website content...")
-            if agent_callback:
-                agent_callback("Content", "Processing")
-
+            # Step 3: Content Generation (40-55%)
             try:
+                if progress_callback:
+                    progress_callback(45, "📝 Generating website content...")
+                if agent_callback:
+                    agent_callback("Content", "Processing")
+
                 content_result = await self.content_agent.generate_content(
                     understanding_result,
                     design_result
                 )
                 result['steps'].append({
                     'agent': 'content',
-                    'result': content_result,
                     'success': content_result.get('success', False)
                 })
 
                 if agent_callback:
                     agent_callback("Content", "Complete ✓")
+
+                if progress_callback:
+                    progress_callback(55, "Content complete")
+
             except Exception as e:
-                if agent_callback:
-                    agent_callback("Content", f"Error: {str(e)}")
+                print(f"Content error: {e}")
                 content_result = {
                     'success': False,
-                    'error': str(e)
+                    'error': str(e),
+                    'content': 'Professional website content',
+                    'project_name': input_data.get('project_name', 'Website')
                 }
 
-            # Step 4: Code Generation (60-75%)
-            if progress_callback:
-                progress_callback(60, "💻 Generating website code...")
-            if agent_callback:
-                agent_callback("Code", "Processing")
-
+            # Step 4: Code Generation (55-75%)
             try:
+                if progress_callback:
+                    progress_callback(60, "💻 Generating website code...")
+                if agent_callback:
+                    agent_callback("Code", "Processing")
+
                 code_result = await self.code_agent.generate_code(
                     design_result,
                     content_result,
@@ -153,58 +162,55 @@ class OrchestratorAgent:
                 )
                 result['steps'].append({
                     'agent': 'code',
-                    'result': code_result,
                     'success': code_result.get('success', False)
                 })
                 result['code'] = code_result.get('files', {})
 
                 if agent_callback:
                     agent_callback("Code", "Complete ✓")
+
+                if progress_callback:
+                    progress_callback(75, "Code generation complete")
+
             except Exception as e:
-                if agent_callback:
-                    agent_callback("Code", f"Error: {str(e)}")
-                # Use fallback if code generation fails
+                print(f"Code error: {e}")
+                # Code agent has built-in fallback, but add extra safety
                 code_result = {
-                    'success': True,
-                    'files': {
-                        'index.html': self.get_emergency_fallback_html(input_data),
-                        'README.md': '# Generated Website\n\nThis is a fallback template.'
-                    },
-                    'note': f'Used emergency fallback due to: {str(e)}'
+                    'success': False,
+                    'error': str(e),
+                    'files': {}
                 }
-                result['code'] = code_result.get('files', {})
 
-            # Step 5: Quality Assurance (80-85%)
-            if progress_callback:
-                progress_callback(80, "✅ Running quality checks...")
-            if agent_callback:
-                agent_callback("QA", "Processing")
-
+            # Step 5: Quality Assurance (75-85%)
             try:
+                if progress_callback:
+                    progress_callback(80, "✅ Running quality checks...")
+                if agent_callback:
+                    agent_callback("QA", "Processing")
+
                 qa_result = await self.qa_agent.validate(code_result)
                 result['steps'].append({
                     'agent': 'qa',
-                    'result': qa_result,
                     'success': qa_result.get('success', False)
                 })
 
                 if agent_callback:
                     agent_callback("QA", "Complete ✓")
+
             except Exception as e:
-                if agent_callback:
-                    agent_callback("QA", f"Warning: {str(e)}")
+                print(f"QA error: {e}")
                 qa_result = {
                     'success': True,
-                    'note': 'QA skipped due to error'
+                    'note': 'QA checks skipped'
                 }
 
-            # Step 6: Deployment/Packaging (90-100%)
-            if progress_callback:
-                progress_callback(90, "📦 Packaging your website...")
-            if agent_callback:
-                agent_callback("Deployment", "Processing")
-
+            # Step 6: Deployment/Packaging (85-100%)
             try:
+                if progress_callback:
+                    progress_callback(90, "📦 Packaging your website...")
+                if agent_callback:
+                    agent_callback("Deployment", "Processing")
+
                 deployment_result = await self.deployment_agent.package(
                     code_result,
                     output_dir,
@@ -212,16 +218,15 @@ class OrchestratorAgent:
                 )
                 result['steps'].append({
                     'agent': 'deployment',
-                    'result': deployment_result,
                     'success': deployment_result.get('success', False)
                 })
                 result['deploy_result'] = deployment_result
 
                 if agent_callback:
                     agent_callback("Deployment", "Complete ✓")
+
             except Exception as e:
-                if agent_callback:
-                    agent_callback("Deployment", f"Warning: {str(e)}")
+                print(f"Deployment error: {e}")
                 deployment_result = {
                     'success': False,
                     'error': str(e)
@@ -245,6 +250,7 @@ class OrchestratorAgent:
             return result
 
         except Exception as e:
+            print(f"Orchestrator error: {e}")
             if progress_callback:
                 progress_callback(100, f"❌ Error: {str(e)}")
 
@@ -254,250 +260,3 @@ class OrchestratorAgent:
                 'project_id': input_data.get('project_id', 'unknown'),
                 'completed_at': datetime.now().isoformat()
             }
-
-    def get_emergency_fallback_html(self, input_data: Dict[str, Any]) -> str:
-        """Get emergency fallback HTML when all else fails"""
-        project_name = input_data.get('project_name', 'My Website')
-        prompt = input_data.get('prompt', 'Welcome to my website')
-
-        return f"""<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="{project_name}">
-    <title>{project_name}</title>
-    <style>
-        * {{
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }}
-
-        body {{
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: #f9fafb;
-        }}
-
-        .hero {{
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 100px 20px;
-            text-align: center;
-            min-height: 60vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-        }}
-
-        .hero h1 {{
-            font-size: 3.5em;
-            margin-bottom: 20px;
-            animation: fadeInDown 1s ease-out;
-        }}
-
-        .hero p {{
-            font-size: 1.4em;
-            margin-bottom: 30px;
-            opacity: 0.95;
-            max-width: 700px;
-            animation: fadeInUp 1s ease-out 0.3s both;
-        }}
-
-        .btn {{
-            display: inline-block;
-            padding: 16px 45px;
-            background: white;
-            color: #667eea;
-            text-decoration: none;
-            border-radius: 30px;
-            font-weight: 600;
-            font-size: 1.1em;
-            transition: all 0.3s ease;
-            animation: fadeInUp 1s ease-out 0.6s both;
-        }}
-
-        .btn:hover {{
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        }}
-
-        .container {{
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 80px 20px;
-        }}
-
-        .section-title {{
-            text-align: center;
-            font-size: 2.8em;
-            margin-bottom: 60px;
-            color: #111827;
-        }}
-
-        .features {{
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
-            margin-top: 50px;
-        }}
-
-        .feature-card {{
-            padding: 40px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-        }}
-
-        .feature-card:hover {{
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        }}
-
-        .feature-card h3 {{
-            font-size: 1.6em;
-            margin-bottom: 15px;
-            color: #667eea;
-        }}
-
-        .feature-card p {{
-            color: #6b7280;
-            line-height: 1.7;
-        }}
-
-        footer {{
-            background: #1f2937;
-            color: white;
-            text-align: center;
-            padding: 50px 20px;
-            margin-top: 80px;
-        }}
-
-        footer p {{
-            margin: 10px 0;
-            opacity: 0.9;
-        }}
-
-        @keyframes fadeInDown {{
-            from {{
-                opacity: 0;
-                transform: translateY(-30px);
-            }}
-            to {{
-                opacity: 1;
-                transform: translateY(0);
-            }}
-        }}
-
-        @keyframes fadeInUp {{
-            from {{
-                opacity: 0;
-                transform: translateY(30px);
-            }}
-            to {{
-                opacity: 1;
-                transform: translateY(0);
-            }}
-        }}
-
-        @media (max-width: 768px) {{
-            .hero h1 {{
-                font-size: 2.2em;
-            }}
-
-            .hero p {{
-                font-size: 1.1em;
-            }}
-
-            .features {{
-                grid-template-columns: 1fr;
-            }}
-        }}
-    </style>
-</head>
-<body>
-    <section class="hero">
-        <h1>{project_name}</h1>
-        <p>{prompt[:200]}...</p>
-        <a href="#features" class="btn">Explore Features</a>
-    </section>
-
-    <div class="container">
-        <h2 class="section-title" id="features">Our Amazing Features</h2>
-        <div class="features">
-            <div class="feature-card">
-                <h3>🚀 Fast & Efficient</h3>
-                <p>Lightning-fast performance optimized for the best user experience. Built with modern web technologies and best practices.</p>
-            </div>
-            <div class="feature-card">
-                <h3>💡 Innovative Design</h3>
-                <p>Beautiful, modern interface that captures attention and provides intuitive navigation. Designed with your users in mind.</p>
-            </div>
-            <div class="feature-card">
-                <h3>📱 Fully Responsive</h3>
-                <p>Perfect viewing experience across all devices - from mobile phones to large desktop monitors. Adapts seamlessly.</p>
-            </div>
-            <div class="feature-card">
-                <h3>🔒 Secure & Reliable</h3>
-                <p>Built with security best practices to protect your data and provide a trustworthy platform for your users.</p>
-            </div>
-            <div class="feature-card">
-                <h3>⚡ High Performance</h3>
-                <p>Optimized code and efficient architecture ensure fast loading times and smooth interactions throughout.</p>
-            </div>
-            <div class="feature-card">
-                <h3>🎯 User-Focused</h3>
-                <p>Every element designed with user experience in mind. Accessibility compliant and easy to navigate.</p>
-            </div>
-        </div>
-    </div>
-
-    <footer>
-        <h3>{project_name}</h3>
-        <p>Built with modern web technologies</p>
-        <p>&copy; 2024 {project_name}. All rights reserved.</p>
-        <p style="opacity: 0.6; margin-top: 20px; font-size: 0.9em;">Generated by KimiGPT - AI Website Builder</p>
-    </footer>
-
-    <script>
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {{
-            anchor.addEventListener('click', function (e) {{
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {{
-                    target.scrollIntoView({{ behavior: 'smooth', block: 'start' }});
-                }}
-            }});
-        }});
-
-        // Add scroll animations
-        const observerOptions = {{
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        }};
-
-        const observer = new IntersectionObserver((entries) => {{
-            entries.forEach(entry => {{
-                if (entry.isIntersecting) {{
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }}
-            }});
-        }}, observerOptions);
-
-        // Observe all feature cards
-        document.querySelectorAll('.feature-card').forEach(card => {{
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(30px)';
-            card.style.transition = 'all 0.6s ease-out';
-            observer.observe(card);
-        }});
-    </script>
-</body>
-</html>
-"""

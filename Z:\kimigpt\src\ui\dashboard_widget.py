@@ -22,8 +22,8 @@ class DashboardWidget(QWidget):
     def init_ui(self):
         """Initialize the dashboard UI"""
         main_layout = QVBoxLayout(self)
-        main_layout.setContentsMargins(40, 40, 40, 40)
-        main_layout.setSpacing(30)
+        main_layout.setContentsMargins(50, 50, 50, 50)
+        main_layout.setSpacing(35)
 
         # Hero Section
         hero_section = self.create_hero_section()
@@ -45,25 +45,28 @@ class DashboardWidget(QWidget):
         frame.setObjectName("card")
 
         layout = QVBoxLayout(frame)
-        layout.setContentsMargins(40, 40, 40, 40)
-        layout.setSpacing(20)
+        layout.setContentsMargins(50, 50, 50, 50)
+        layout.setSpacing(25)
 
         # Title
         title = QLabel("Build Websites with AI Intelligence")
         title.setObjectName("sectionTitle")
-        title.setFont(QFont("Segoe UI", 32, QFont.Weight.Bold))
+        title.setFont(QFont("Segoe UI", 28, QFont.Weight.Bold))
         title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        title.setWordWrap(True)
+        title.setMaximumHeight(80)
 
         # Subtitle
         subtitle = QLabel(
-            "Revolutionary multi-agent AI system that creates professional, production-ready websites\n"
-            "from any input - text, images, audio, or video. Smart API rotation, real-time preview,\n"
+            "Revolutionary multi-agent AI system that creates professional, production-ready websites "
+            "from any input - text, images, audio, or video. Smart API rotation, real-time preview, "
             "and one-click deployment."
         )
         subtitle.setObjectName("sectionSubtitle")
-        subtitle.setFont(QFont("Segoe UI", 14))
+        subtitle.setFont(QFont("Segoe UI", 13))
         subtitle.setAlignment(Qt.AlignmentFlag.AlignCenter)
         subtitle.setWordWrap(True)
+        subtitle.setMaximumWidth(900)
 
         # Buttons
         button_layout = QHBoxLayout()
@@ -88,8 +91,14 @@ class DashboardWidget(QWidget):
         button_layout.addWidget(api_btn)
         button_layout.addStretch()
 
+        # Center subtitle in a horizontal layout
+        subtitle_container = QHBoxLayout()
+        subtitle_container.addStretch()
+        subtitle_container.addWidget(subtitle)
+        subtitle_container.addStretch()
+
         layout.addWidget(title)
-        layout.addWidget(subtitle)
+        layout.addLayout(subtitle_container)
         layout.addSpacing(20)
         layout.addLayout(button_layout)
 
@@ -101,12 +110,12 @@ class DashboardWidget(QWidget):
         frame.setObjectName("card")
 
         layout = QGridLayout(frame)
-        layout.setContentsMargins(20, 20, 20, 20)
-        layout.setSpacing(20)
+        layout.setContentsMargins(30, 30, 30, 30)
+        layout.setSpacing(25)
 
         stats = [
             ("🤖 AI Agents", "8", "Specialized Agents"),
-            ("🔗 API Providers", "8+", "AI Services"),
+            ("🔗 API Providers", "12+", "AI Services"),
             ("📁 Supported Formats", "10+", "File Types"),
             ("⚡ Generation Speed", "< 60s", "Average Time")
         ]
@@ -122,9 +131,20 @@ class DashboardWidget(QWidget):
         widget = QFrame()
         widget.setStyleSheet("""
             QFrame {
-                background-color: #f9fafb;
-                border-radius: 8px;
-                padding: 20px;
+                background: qlineargradient(
+                    x1:0, y1:0, x2:0, y2:1,
+                    stop:0 #ffffff, stop:1 #f8fafc
+                );
+                border: 2px solid #e0e7ff;
+                border-radius: 14px;
+                padding: 24px;
+            }
+            QFrame:hover {
+                border-color: #c7d2fe;
+                background: qlineargradient(
+                    x1:0, y1:0, x2:0, y2:1,
+                    stop:0 #fefefe, stop:1 #faf5ff
+                );
             }
         """)
 
@@ -133,19 +153,19 @@ class DashboardWidget(QWidget):
         layout.setSpacing(10)
 
         title_label = QLabel(title)
-        title_label.setFont(QFont("Segoe UI", 13, QFont.Weight.DemiBold))
+        title_label.setFont(QFont("Segoe UI", 14, QFont.Weight.DemiBold))
         title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        title_label.setStyleSheet("color: #6b7280;")
+        title_label.setStyleSheet("color: #475569; margin-bottom: 4px;")
 
         value_label = QLabel(value)
-        value_label.setFont(QFont("Segoe UI", 36, QFont.Weight.Bold))
+        value_label.setFont(QFont("Segoe UI", 42, QFont.Weight.Bold))
         value_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        value_label.setStyleSheet("color: #667eea;")
+        value_label.setStyleSheet("color: #6366f1; margin: 8px 0;")
 
         desc_label = QLabel(description)
-        desc_label.setFont(QFont("Segoe UI", 11))
+        desc_label.setFont(QFont("Segoe UI", 12))
         desc_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        desc_label.setStyleSheet("color: #9ca3af;")
+        desc_label.setStyleSheet("color: #64748b; margin-top: 4px;")
 
         layout.addWidget(title_label)
         layout.addWidget(value_label)
@@ -159,8 +179,8 @@ class DashboardWidget(QWidget):
         frame.setObjectName("card")
 
         layout = QVBoxLayout(frame)
-        layout.setContentsMargins(30, 30, 30, 30)
-        layout.setSpacing(25)
+        layout.setContentsMargins(40, 40, 40, 40)
+        layout.setSpacing(30)
 
         # Title
         title = QLabel("Why Choose KimiGPT?")
@@ -172,11 +192,11 @@ class DashboardWidget(QWidget):
 
         # Features grid
         features_grid = QGridLayout()
-        features_grid.setSpacing(20)
+        features_grid.setSpacing(25)
 
         features = [
             ("🤖 Multi-Agent AI", "8 specialized AI agents work together for perfect results"),
-            ("🔄 Smart API Rotation", "Automatic failover across 8+ AI providers"),
+            ("🔄 Smart API Rotation", "Automatic failover across 12+ free AI providers"),
             ("🎨 Multi-Modal Input", "Text, images, videos, audio - any input works"),
             ("👀 Real-Time Preview", "Watch your website being built live"),
             ("⚡ Advanced Features", "PWA, accessibility, SEO optimization included"),
@@ -198,12 +218,17 @@ class DashboardWidget(QWidget):
         widget = QFrame()
         widget.setStyleSheet("""
             QFrame {
-                background-color: #f9fafb;
-                border-radius: 10px;
-                padding: 25px;
+                background: white;
+                border: 2px solid #e2e8f0;
+                border-radius: 14px;
+                padding: 28px;
             }
             QFrame:hover {
-                background-color: #ede9fe;
+                background: qlineargradient(
+                    x1:0, y1:0, x2:0, y2:1,
+                    stop:0 #faf5ff, stop:1 #f5f3ff
+                );
+                border-color: #c7d2fe;
             }
         """)
 
@@ -211,12 +236,12 @@ class DashboardWidget(QWidget):
         layout.setSpacing(12)
 
         title_label = QLabel(title)
-        title_label.setFont(QFont("Segoe UI", 16, QFont.Weight.Bold))
-        title_label.setStyleSheet("color: #111827;")
+        title_label.setFont(QFont("Segoe UI", 17, QFont.Weight.Bold))
+        title_label.setStyleSheet("color: #0f172a; margin-bottom: 8px;")
 
         desc_label = QLabel(description)
-        desc_label.setFont(QFont("Segoe UI", 13))
-        desc_label.setStyleSheet("color: #6b7280;")
+        desc_label.setFont(QFont("Segoe UI", 14))
+        desc_label.setStyleSheet("color: #475569; line-height: 1.6;")
         desc_label.setWordWrap(True)
 
         layout.addWidget(title_label)

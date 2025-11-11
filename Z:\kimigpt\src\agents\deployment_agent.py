@@ -1,11 +1,10 @@
 """
-Deployment Agent for KimiGPT
+Deployment Agent for KimiGPT - FIXED VERSION
 Packages and prepares website for deployment
 """
 
 from typing import Dict, Any
 from pathlib import Path
-import shutil
 import zipfile
 from datetime import datetime
 
@@ -38,103 +37,100 @@ class DeploymentAgent:
                         f.write(content)
                     written_files.append(str(file_path))
                 except Exception as e:
-                    print(f"Error writing {filename}: {e}")
+                    print(f"Warning: Could not write {filename}: {e}")
 
             # Create ZIP file
             zip_filename = f"{input_data.get('project_id', 'website')}.zip"
             zip_path = output_dir.parent / zip_filename
 
-            with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
-                for file_path in written_files:
-                    file_path_obj = Path(file_path)
-                    zipf.write(file_path, file_path_obj.name)
+            try:
+                with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+                    for file_path in written_files:
+                        file_path_obj = Path(file_path)
+                        if file_path_obj.exists():
+                            zipf.write(file_path, file_path_obj.name)
+            except Exception as e:
+                print(f"Warning: Could not create ZIP: {e}")
+                zip_path = None
 
             # Create deployment guide
-            deployment_guide = self.create_deployment_guide(input_data)
+            deployment_guide = self._create_deployment_guide(input_data)
             guide_path = output_dir / 'DEPLOYMENT_GUIDE.md'
 
-            with open(guide_path, 'w', encoding='utf-8') as f:
-                f.write(deployment_guide)
+            try:
+                with open(guide_path, 'w', encoding='utf-8') as f:
+                    f.write(deployment_guide)
+                written_files.append(str(guide_path))
+            except Exception as e:
+                print(f"Warning: Could not write deployment guide: {e}")
 
             return {
                 'success': True,
                 'output_dir': str(output_dir),
                 'files_written': len(written_files),
                 'written_files': written_files,
-                'zip_file_path': str(zip_path),
+                'zip_file_path': str(zip_path) if zip_path else None,
                 'zip_filename': zip_filename,
-                'deployment_guide': str(guide_path)
+                'deployment_guide': str(guide_path) if guide_path.exists() else None
             }
 
         except Exception as e:
             return {
                 'success': False,
-                'error': str(e)
+                'error': f"Packaging failed: {str(e)}"
             }
 
-    def create_deployment_guide(self, input_data: Dict[str, Any]) -> str:
+    def _create_deployment_guide(self, input_data: Dict[str, Any]) -> str:
         """Create deployment guide"""
-        return f"""# Deployment Guide
-## {input_data.get('project_name', 'Your Website')}
+        project_name = input_data.get('project_name', 'Your Website')
 
-Generated on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+        return f"""# Deployment Guide - {project_name}
 
-### Files Included
-- `index.html` - Main website file
-- `README.md` - Project documentation
-- Additional assets (if any)
+Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
-### Quick Start
-1. Open `index.html` in a web browser to preview locally
-2. All files are ready for deployment
+## Quick Start
+1. Open `index.html` in a web browser to preview
+2. All files are ready for deployment!
 
-### Deployment Options
+## Deployment Options
 
-#### Option 1: Netlify (Recommended)
+### Option 1: Netlify (Easiest - Recommended)
 1. Go to https://www.netlify.com/
-2. Drag and drop your files or ZIP file
-3. Your site will be live instantly!
+2. Drag and drop the ZIP file or folder
+3. Your site is live instantly!
 4. Free SSL certificate included
 
-#### Option 2: Vercel
-1. Go to https://vercel.com/
+### Option 2: Vercel
+1. Visit https://vercel.com/
 2. Import your project
 3. Deploy with one click
-4. Free hosting with custom domain support
+4. Free custom domain support
 
-#### Option 3: GitHub Pages
-1. Create a GitHub repository
-2. Upload your files
-3. Enable GitHub Pages in settings
-4. Your site will be live at username.github.io/repo-name
+### Option 3: GitHub Pages
+1. Create a new GitHub repository
+2. Upload all files
+3. Go to Settings → Pages
+4. Enable GitHub Pages
+5. Your site will be at username.github.io/repo-name
 
-#### Option 4: Traditional Hosting
-1. Get a web hosting account (e.g., Bluehost, HostGator, SiteGround)
+### Option 4: Traditional Web Hosting
+1. Get a hosting account (Bluehost, HostGator, etc.)
 2. Upload files via FTP or cPanel File Manager
-3. Place files in the public_html or www directory
-4. Access your site at your domain name
+3. Place in public_html or www directory
+4. Access at your domain name
 
-### Testing Your Website
-- Test on multiple browsers (Chrome, Firefox, Safari, Edge)
-- Test on mobile devices
-- Check all links and buttons
-- Verify contact forms work
-- Test responsive design by resizing browser window
+## Testing Checklist
+- [ ] Test on Chrome, Firefox, Safari
+- [ ] Test on mobile devices
+- [ ] Check all links work
+- [ ] Verify responsive design
+- [ ] Test on different screen sizes
 
-### Support
-For issues or questions:
-- Check README.md for project details
-- Review the code comments
-- Contact your hosting provider for deployment issues
-
-### Next Steps
-- ✅ Add custom domain
-- ✅ Set up analytics (Google Analytics)
-- ✅ Configure SEO meta tags
-- ✅ Add social media links
-- ✅ Set up contact form backend (if needed)
+## Need Help?
+- All files are in the output directory
+- index.html is your main file
+- No server-side code - works anywhere!
 
 ---
 Generated by KimiGPT - AI Website Builder
-https://github.com/kimigpt
 """

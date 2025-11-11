@@ -1,5 +1,5 @@
 """
-QA Agent for KimiGPT
+QA Agent for KimiGPT - FIXED VERSION
 Validates and tests generated code
 """
 
@@ -25,22 +25,35 @@ class QAAgent:
                 'error': 'No HTML code to validate'
             }
 
-        # Perform basic validation
+        # Perform basic validation checks
         validation_results = {
             'html_present': bool(html_code),
-            'has_doctype': html_code.strip().startswith('<!DOCTYPE'),
-            'has_head': '<head>' in html_code.lower(),
-            'has_body': '<body>' in html_code.lower(),
+            'has_doctype': '<!DOCTYPE' in html_code or '<!doctype' in html_code,
+            'has_html_tag': '<html' in html_code.lower(),
+            'has_head': '<head>' in html_code.lower() or '<head ' in html_code.lower(),
+            'has_body': '<body' in html_code.lower(),
             'has_title': '<title>' in html_code.lower(),
             'has_viewport': 'viewport' in html_code.lower(),
-            'responsive': 'media' in html_code.lower() or '@media' in html_code.lower(),
-            'file_count': len(files)
+            'has_charset': 'charset' in html_code.lower(),
+            'responsive': 'media' in html_code.lower() or '@media' in html_code.lower() or 'responsive' in html_code.lower(),
+            'file_count': len(files),
+            'code_length': len(html_code)
         }
 
         # Calculate score
-        score = sum(1 for v in validation_results.values() if v is True)
-        total_checks = len([v for v in validation_results.values() if isinstance(v, bool)])
+        score = sum(1 for k, v in validation_results.items() if isinstance(v, bool) and v)
+        total_checks = sum(1 for v in validation_results.values() if isinstance(v, bool))
         percentage = (score / total_checks * 100) if total_checks > 0 else 0
+
+        # Determine quality level
+        if percentage >= 90:
+            quality_level = 'Excellent'
+        elif percentage >= 75:
+            quality_level = 'Good'
+        elif percentage >= 60:
+            quality_level = 'Fair'
+        else:
+            quality_level = 'Needs Improvement'
 
         return {
             'success': True,
@@ -48,11 +61,11 @@ class QAAgent:
             'score': score,
             'total_checks': total_checks,
             'percentage': round(percentage, 1),
-            'quality_level': 'Excellent' if percentage >= 90 else 'Good' if percentage >= 70 else 'Fair',
-            'recommendations': self.get_recommendations(validation_results)
+            'quality_level': quality_level,
+            'recommendations': self._get_recommendations(validation_results)
         }
 
-    def get_recommendations(self, validation_results: Dict[str, Any]) -> list:
+    def _get_recommendations(self, validation_results: Dict[str, Any]) -> list:
         """Get recommendations based on validation results"""
         recommendations = []
 
@@ -63,9 +76,12 @@ class QAAgent:
             recommendations.append("Add viewport meta tag for mobile responsiveness")
 
         if not validation_results.get('responsive'):
-            recommendations.append("Add media queries for responsive design")
+            recommendations.append("Consider adding responsive design features")
+
+        if not validation_results.get('has_charset'):
+            recommendations.append("Add character encoding declaration")
 
         if not recommendations:
-            recommendations.append("Code quality is excellent!")
+            recommendations.append("Code quality is excellent! ✓")
 
         return recommendations
