@@ -16,12 +16,14 @@ from src.agents.code_agent import CodeAgent
 from src.agents.content_agent import ContentAgent
 from src.agents.qa_agent import QAAgent
 from src.agents.deployment_agent import DeploymentAgent
+from src.core.config_manager import ConfigManager
 
 
 class OrchestratorAgent:
     """Master orchestrator that coordinates all agents"""
 
     def __init__(self):
+        self.config_manager = ConfigManager()
         self.api_manager = APIManager()
         self.understanding_agent = UnderstandingAgent(self.api_manager)
         self.design_agent = DesignAgent(self.api_manager)
@@ -49,7 +51,8 @@ class OrchestratorAgent:
         """
         try:
             project_id = input_data.get('project_id', 'unknown')
-            output_dir = Path(f"Z:\\kimigpt\\output\\{project_id}")
+            base_output_dir = self.config_manager.get_output_dir()
+            output_dir = Path(base_output_dir) / project_id
             output_dir.mkdir(parents=True, exist_ok=True)
 
             result = {
