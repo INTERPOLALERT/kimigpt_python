@@ -49,7 +49,7 @@ class OrchestratorAgent:
         """
         try:
             project_id = input_data.get('project_id', 'unknown')
-            output_dir = Path(f"Z:\\kimigpt\\python kimi\\output\\{project_id}")
+            output_dir = Path(f"Z:\\kimigpt\\output\\{project_id}")
             output_dir.mkdir(parents=True, exist_ok=True)
 
             result = {

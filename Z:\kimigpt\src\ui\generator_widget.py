@@ -225,7 +225,21 @@ class GeneratorWidget(QWidget):
         advanced_group = QGroupBox("⚙️ Advanced Options")
         advanced_group.setCheckable(True)
         advanced_group.setChecked(False)
-        advanced_layout = QVBoxLayout(advanced_group)
+
+        # Create scroll area for advanced options
+        advanced_scroll = QScrollArea()
+        advanced_scroll.setWidgetResizable(True)
+        advanced_scroll.setFrameShape(QFrame.Shape.NoFrame)
+        advanced_scroll.setMaximumHeight(400)
+
+        advanced_container = QWidget()
+        advanced_layout = QVBoxLayout(advanced_container)
+
+        # === DESIGN & STYLE ===
+        design_section = QLabel("🎨 DESIGN & STYLE")
+        design_section.setFont(QFont("Segoe UI", 11, QFont.Weight.Bold))
+        design_section.setStyleSheet("color: #667eea; margin-top: 10px;")
+        advanced_layout.addWidget(design_section)
 
         # Style selection
         style_layout = QHBoxLayout()
@@ -236,7 +250,9 @@ class GeneratorWidget(QWidget):
             "Classic & Professional",
             "Creative & Artistic",
             "Minimalist & Simple",
-            "Playful & Fun"
+            "Playful & Fun",
+            "Bold & Vibrant",
+            "Elegant & Luxury"
         ])
         self.style_combo.setMinimumHeight(35)
         style_layout.addWidget(self.style_combo)
@@ -246,37 +262,236 @@ class GeneratorWidget(QWidget):
         color_layout = QHBoxLayout()
         color_layout.addWidget(QLabel("Color Scheme:"))
         self.color_combo = QComboBox()
-        self.color_combo.addItems(["Blue", "Green", "Purple", "Red", "Orange", "Custom"])
+        self.color_combo.addItems(["Blue", "Green", "Purple", "Red", "Orange", "Pink", "Teal", "Gray", "Custom"])
         self.color_combo.setMinimumHeight(35)
         color_layout.addWidget(self.color_combo)
         advanced_layout.addLayout(color_layout)
+
+        # Layout style
+        layout_style_layout = QHBoxLayout()
+        layout_style_layout.addWidget(QLabel("Layout Style:"))
+        self.layout_style_combo = QComboBox()
+        self.layout_style_combo.addItems([
+            "Grid-based",
+            "Flexbox Flow",
+            "Card Layout",
+            "Magazine Style",
+            "Split Screen"
+        ])
+        self.layout_style_combo.setMinimumHeight(35)
+        layout_style_layout.addWidget(self.layout_style_combo)
+        advanced_layout.addLayout(layout_style_layout)
+
+        # Font preference
+        font_layout = QHBoxLayout()
+        font_layout.addWidget(QLabel("Font Style:"))
+        self.font_combo = QComboBox()
+        self.font_combo.addItems([
+            "Sans-Serif (Modern)",
+            "Serif (Classic)",
+            "Monospace (Tech)",
+            "Mixed (Dynamic)"
+        ])
+        self.font_combo.setMinimumHeight(35)
+        font_layout.addWidget(self.font_combo)
+        advanced_layout.addLayout(font_layout)
+
+        # === FEATURES & FUNCTIONALITY ===
+        features_section = QLabel("⚙️ FEATURES & FUNCTIONALITY")
+        features_section.setFont(QFont("Segoe UI", 11, QFont.Weight.Bold))
+        features_section.setStyleSheet("color: #667eea; margin-top: 15px;")
+        advanced_layout.addWidget(features_section)
 
         # Complexity
         complexity_layout = QHBoxLayout()
         complexity_layout.addWidget(QLabel("Complexity:"))
         self.complexity_combo = QComboBox()
         self.complexity_combo.addItems([
-            "Simple (Fast generation)",
-            "Moderate (Balanced)",
-            "Advanced (Feature-rich)"
+            "Simple (1-3 sections)",
+            "Moderate (4-6 sections)",
+            "Advanced (7+ sections)"
         ])
         self.complexity_combo.setCurrentIndex(1)
         self.complexity_combo.setMinimumHeight(35)
         complexity_layout.addWidget(self.complexity_combo)
         advanced_layout.addLayout(complexity_layout)
 
+        # Animations
+        animation_layout = QHBoxLayout()
+        animation_layout.addWidget(QLabel("Animations:"))
+        self.animation_combo = QComboBox()
+        self.animation_combo.addItems([
+            "None (Static)",
+            "Subtle (Minimal)",
+            "Moderate (Balanced)",
+            "Heavy (Interactive)"
+        ])
+        self.animation_combo.setCurrentIndex(2)
+        self.animation_combo.setMinimumHeight(35)
+        animation_layout.addWidget(self.animation_combo)
+        advanced_layout.addLayout(animation_layout)
+
+        # Interactivity level
+        interactivity_layout = QHBoxLayout()
+        interactivity_layout.addWidget(QLabel("Interactivity:"))
+        self.interactivity_combo = QComboBox()
+        self.interactivity_combo.addItems([
+            "Basic (Links only)",
+            "Standard (Forms, modals)",
+            "Advanced (Full interactions)"
+        ])
+        self.interactivity_combo.setCurrentIndex(2)
+        self.interactivity_combo.setMinimumHeight(35)
+        interactivity_layout.addWidget(self.interactivity_combo)
+        advanced_layout.addLayout(interactivity_layout)
+
+        # Form types
+        form_layout = QHBoxLayout()
+        form_layout.addWidget(QLabel("Include Forms:"))
+        self.form_combo = QComboBox()
+        self.form_combo.addItems([
+            "Contact only",
+            "Contact + Newsletter",
+            "Contact + Signup",
+            "All forms",
+            "No forms"
+        ])
+        self.form_combo.setMinimumHeight(35)
+        form_layout.addWidget(self.form_combo)
+        advanced_layout.addLayout(form_layout)
+
+        # Mobile menu style
+        mobile_menu_layout = QHBoxLayout()
+        mobile_menu_layout.addWidget(QLabel("Mobile Menu:"))
+        self.mobile_menu_combo = QComboBox()
+        self.mobile_menu_combo.addItems([
+            "Hamburger (Side)",
+            "Bottom Nav Bar",
+            "Full Screen Overlay",
+            "Slide-in Drawer"
+        ])
+        self.mobile_menu_combo.setMinimumHeight(35)
+        mobile_menu_layout.addWidget(self.mobile_menu_combo)
+        advanced_layout.addLayout(mobile_menu_layout)
+
+        # === OPTIMIZATION ===
+        optimization_section = QLabel("🚀 OPTIMIZATION")
+        optimization_section.setFont(QFont("Segoe UI", 11, QFont.Weight.Bold))
+        optimization_section.setStyleSheet("color: #667eea; margin-top: 15px;")
+        advanced_layout.addWidget(optimization_section)
+
+        # SEO level
+        seo_layout = QHBoxLayout()
+        seo_layout.addWidget(QLabel("SEO Level:"))
+        self.seo_combo = QComboBox()
+        self.seo_combo.addItems([
+            "Basic (Meta tags)",
+            "Standard (Meta + Schema)",
+            "Advanced (Full optimization)"
+        ])
+        self.seo_combo.setCurrentIndex(1)
+        self.seo_combo.setMinimumHeight(35)
+        seo_layout.addWidget(self.seo_combo)
+        advanced_layout.addLayout(seo_layout)
+
+        # Performance optimization
+        performance_layout = QHBoxLayout()
+        performance_layout.addWidget(QLabel("Performance:"))
+        self.performance_combo = QComboBox()
+        self.performance_combo.addItems([
+            "Standard",
+            "Optimized (Lazy loading)",
+            "Maximum (All optimizations)"
+        ])
+        self.performance_combo.setCurrentIndex(1)
+        self.performance_combo.setMinimumHeight(35)
+        performance_layout.addWidget(self.performance_combo)
+        advanced_layout.addLayout(performance_layout)
+
+        # Accessibility
+        accessibility_layout = QHBoxLayout()
+        accessibility_layout.addWidget(QLabel("Accessibility:"))
+        self.accessibility_combo = QComboBox()
+        self.accessibility_combo.addItems([
+            "Basic (ARIA labels)",
+            "Standard (WCAG A)",
+            "Advanced (WCAG AA)"
+        ])
+        self.accessibility_combo.setCurrentIndex(1)
+        self.accessibility_combo.setMinimumHeight(35)
+        accessibility_layout.addWidget(self.accessibility_combo)
+        advanced_layout.addLayout(accessibility_layout)
+
+        # Browser compatibility
+        browser_layout = QHBoxLayout()
+        browser_layout.addWidget(QLabel("Browser Support:"))
+        self.browser_combo = QComboBox()
+        self.browser_combo.addItems([
+            "Modern browsers only",
+            "Last 2 versions",
+            "Maximum compatibility"
+        ])
+        self.browser_combo.setCurrentIndex(1)
+        self.browser_combo.setMinimumHeight(35)
+        browser_layout.addWidget(self.browser_combo)
+        advanced_layout.addLayout(browser_layout)
+
+        # === TECHNOLOGY ===
+        tech_section = QLabel("💻 TECHNOLOGY")
+        tech_section.setFont(QFont("Segoe UI", 11, QFont.Weight.Bold))
+        tech_section.setStyleSheet("color: #667eea; margin-top: 15px;")
+        advanced_layout.addWidget(tech_section)
+
         # Framework
         framework_layout = QHBoxLayout()
-        framework_layout.addWidget(QLabel("Technology:"))
+        framework_layout.addWidget(QLabel("CSS Framework:"))
         self.framework_combo = QComboBox()
         self.framework_combo.addItems([
             "Pure HTML/CSS/JS",
             "Tailwind CSS",
-            "Bootstrap"
+            "Bootstrap 5"
         ])
         self.framework_combo.setMinimumHeight(35)
         framework_layout.addWidget(self.framework_combo)
         advanced_layout.addLayout(framework_layout)
+
+        # Page type
+        page_type_layout = QHBoxLayout()
+        page_type_layout.addWidget(QLabel("Page Type:"))
+        self.page_type_combo = QComboBox()
+        self.page_type_combo.addItems([
+            "Single Page (SPA)",
+            "Multi-Page (Traditional)"
+        ])
+        self.page_type_combo.setMinimumHeight(35)
+        page_type_layout.addWidget(self.page_type_combo)
+        advanced_layout.addLayout(page_type_layout)
+
+        # === ANALYTICS & TRACKING ===
+        analytics_section = QLabel("📊 ANALYTICS & TRACKING")
+        analytics_section.setFont(QFont("Segoe UI", 11, QFont.Weight.Bold))
+        analytics_section.setStyleSheet("color: #667eea; margin-top: 15px;")
+        advanced_layout.addWidget(analytics_section)
+
+        # Analytics integration
+        analytics_layout = QHBoxLayout()
+        analytics_layout.addWidget(QLabel("Analytics:"))
+        self.analytics_combo = QComboBox()
+        self.analytics_combo.addItems([
+            "None",
+            "Google Analytics placeholder",
+            "Google Analytics + Meta Pixel",
+            "Full tracking suite"
+        ])
+        self.analytics_combo.setMinimumHeight(35)
+        analytics_layout.addWidget(self.analytics_combo)
+        advanced_layout.addLayout(analytics_layout)
+
+        advanced_scroll.setWidget(advanced_container)
+
+        # Add scroll area to group
+        advanced_group_layout = QVBoxLayout(advanced_group)
+        advanced_group_layout.addWidget(advanced_scroll)
 
         layout.addWidget(advanced_group)
 
@@ -464,17 +679,38 @@ class GeneratorWidget(QWidget):
                 self.parent.tabs.setCurrentIndex(2)
             return
 
-        # Prepare input data
+        # Prepare input data with comprehensive preferences
         input_data = {
             'project_id': f"project_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
             'project_name': self.project_name_input.text().strip(),
             'prompt': prompt,
             'files': self.uploaded_files,
             'preferences': {
+                # Design & Style
                 'style': self.style_combo.currentText(),
                 'color_scheme': self.color_combo.currentText().lower(),
+                'layout_style': self.layout_style_combo.currentText(),
+                'font_style': self.font_combo.currentText().split()[0],
+
+                # Features & Functionality
                 'complexity': self.complexity_combo.currentText().split()[0].lower(),
-                'framework': self.framework_combo.currentText().split()[0].lower()
+                'animations': self.animation_combo.currentText().split()[0].lower(),
+                'interactivity': self.interactivity_combo.currentText().split()[0].lower(),
+                'forms': self.form_combo.currentText(),
+                'mobile_menu': self.mobile_menu_combo.currentText().split()[0],
+
+                # Optimization
+                'seo_level': self.seo_combo.currentText().split()[0].lower(),
+                'performance': self.performance_combo.currentText().split()[0].lower(),
+                'accessibility': self.accessibility_combo.currentText().split()[0].lower(),
+                'browser_support': self.browser_combo.currentText(),
+
+                # Technology
+                'framework': self.framework_combo.currentText().split()[0].lower(),
+                'page_type': self.page_type_combo.currentText().split()[0].lower(),
+
+                # Analytics
+                'analytics': self.analytics_combo.currentText()
             }
         }
 
