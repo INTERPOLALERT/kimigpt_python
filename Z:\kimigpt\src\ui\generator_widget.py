@@ -94,6 +94,8 @@ class GeneratorWidget(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.parent = parent
+        from src.core.config_manager import ConfigManager
+        self.config_manager = ConfigManager()
         self.uploaded_files = []
         self.generation_thread = None
         self.current_project_id = None
@@ -793,7 +795,8 @@ class GeneratorWidget(QWidget):
     def preview_website(self):
         """Preview generated website"""
         if self.current_project_id:
-            output_path = f"Z:\\kimigpt\\output\\{self.current_project_id}"
+            base_output_dir = self.config_manager.get_output_dir()
+            output_path = os.path.join(base_output_dir, self.current_project_id)
             index_file = os.path.join(output_path, "index.html")
 
             if os.path.exists(index_file):
@@ -805,7 +808,8 @@ class GeneratorWidget(QWidget):
     def download_website(self):
         """Download website as ZIP"""
         if self.current_project_id:
-            output_path = f"Z:\\kimigpt\\output\\{self.current_project_id}"
+            base_output_dir = self.config_manager.get_output_dir()
+            output_path = os.path.join(base_output_dir, self.current_project_id)
 
             if os.path.exists(output_path):
                 save_path, _ = QFileDialog.getSaveFileName(
@@ -827,7 +831,8 @@ class GeneratorWidget(QWidget):
     def open_output_folder(self):
         """Open output folder"""
         if self.current_project_id:
-            output_path = f"Z:\\kimigpt\\output\\{self.current_project_id}"
+            base_output_dir = self.config_manager.get_output_dir()
+            output_path = os.path.join(base_output_dir, self.current_project_id)
 
             if os.path.exists(output_path):
                 import subprocess

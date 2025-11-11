@@ -5,6 +5,7 @@ Handles loading and saving of configuration and API keys
 
 import json
 import os
+import sys
 from pathlib import Path
 from typing import Dict, Any
 
@@ -13,7 +14,15 @@ class ConfigManager:
     """Manage application configuration"""
 
     def __init__(self):
-        self.config_dir = Path("Z:\\kimigpt\\config")
+        # Get the base directory where the app is installed
+        if getattr(sys, 'frozen', False):
+            # Running as compiled exe
+            self.base_dir = Path(sys.executable).parent
+        else:
+            # Running as script - go up from src/core to repo root
+            self.base_dir = Path(__file__).parent.parent.parent
+
+        self.config_dir = self.base_dir / "config"
         self.config_file = self.config_dir / "config.json"
         self.ensure_config_dir()
 
@@ -52,8 +61,8 @@ class ConfigManager:
                 'default_complexity': 'moderate',
                 'default_framework': 'vanilla'
             },
-            'output_dir': 'Z:\\kimigpt\\output',
-            'upload_dir': 'Z:\\kimigpt\\uploads',
+            'output_dir': str(self.base_dir / 'output'),
+            'upload_dir': str(self.base_dir / 'uploads'),
             'version': '1.0.0'
         }
 
@@ -95,13 +104,13 @@ class ConfigManager:
     def get_output_dir(self) -> str:
         """Get output directory"""
         config = self.load_config()
-        output_dir = config.get('output_dir', 'Z:\\kimigpt\\output')
+        output_dir = config.get('output_dir', str(self.base_dir / 'output'))
         Path(output_dir).mkdir(parents=True, exist_ok=True)
         return output_dir
 
     def get_upload_dir(self) -> str:
         """Get upload directory"""
         config = self.load_config()
-        upload_dir = config.get('upload_dir', 'Z:\\kimigpt\\uploads')
+        upload_dir = config.get('upload_dir', str(self.base_dir / 'uploads'))
         Path(upload_dir).mkdir(parents=True, exist_ok=True)
         return upload_dir
