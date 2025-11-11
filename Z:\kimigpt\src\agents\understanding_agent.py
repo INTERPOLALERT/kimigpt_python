@@ -1,5 +1,5 @@
 """
-Understanding Agent for KimiGPT
+Understanding Agent for KimiGPT - FIXED VERSION
 Analyzes user input and extracts requirements
 """
 
@@ -16,40 +16,45 @@ class UnderstandingAgent:
     async def analyze(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
         """Analyze user input and extract requirements"""
 
-        prompt = f"""
-You are an expert website requirements analyst. Analyze the following website request and extract structured requirements.
+        prompt_text = input_data.get('prompt', '').strip()
 
-User Request:
-{input_data.get('prompt', '')}
+        if not prompt_text:
+            return {
+                'success': False,
+                'error': 'No prompt provided',
+                'raw_prompt': ''
+            }
+
+        prompt = f"""You are an expert website requirements analyst. Analyze this website request:
+
+"{prompt_text}"
 
 Project Name: {input_data.get('project_name', 'Website')}
 
-Extract and provide:
-1. Website Type (e.g., business, portfolio, e-commerce, blog, landing page)
-2. Target Audience
-3. Key Features Required
-4. Sections Needed (e.g., hero, about, services, contact, gallery)
-5. Tone and Style (e.g., professional, creative, minimal, playful)
-6. Color Preferences (from description)
-7. Any Specific Technologies or Features Mentioned
+Extract and provide a brief analysis covering:
+1. Website Type (business/portfolio/e-commerce/blog/landing page)
+2. Key Features Required
+3. Main Sections Needed
+4. Style and Tone
 
-Provide your analysis in a structured format.
+Keep it concise (2-3 sentences per point).
 """
 
         try:
-            analysis = await self.api_manager.generate_text(prompt, "text", 2000)
+            analysis = await self.api_manager.generate_text(prompt, 1000)
 
             return {
                 'success': True,
-                'raw_prompt': input_data.get('prompt', ''),
+                'raw_prompt': prompt_text,
                 'analysis': analysis,
-                'files_uploaded': len(input_data.get('files', [])),
+                'project_name': input_data.get('project_name', 'Website'),
                 'preferences': input_data.get('preferences', {})
             }
 
         except Exception as e:
             return {
                 'success': False,
-                'error': str(e),
-                'raw_prompt': input_data.get('prompt', '')
+                'error': f"Understanding analysis failed: {str(e)}",
+                'raw_prompt': prompt_text,
+                'fallback_analysis': f"User wants to create a {input_data.get('preferences', {}).get('style', 'modern')} website."
             }

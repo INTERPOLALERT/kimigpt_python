@@ -1,10 +1,11 @@
 """
-Code Agent for KimiGPT
+Code Agent for KimiGPT - FIXED VERSION
 Generates HTML, CSS, and JavaScript code
 """
 
 from typing import Dict, Any
 from src.api.api_manager import APIManager
+from datetime import datetime
 
 
 class CodeAgent:
@@ -18,99 +19,77 @@ class CodeAgent:
 
         design_spec = design_result.get('design_specification', '')
         content = content_result.get('content', '')
+        project_name = content_result.get('project_name', 'My Website')
         framework = preferences.get('framework', 'vanilla')
-        complexity = preferences.get('complexity', 'moderate')
 
-        # Generate HTML
-        html_prompt = f"""
-Generate a complete, professional HTML5 website based on these specifications:
+        prompt = f"""Generate a complete, professional HTML5 website.
 
-Design Specifications:
+Design Specs:
 {design_spec}
 
 Content:
 {content}
 
 Requirements:
-- Framework: {framework}
-- Complexity: {complexity}
-- Fully responsive design
-- Modern, clean code
+- Single-page, fully responsive
+- Modern, clean design
+- Include proper meta tags
 - SEO-optimized
-- Accessibility compliant (WCAG AA)
-- Include all necessary sections
-- Professional styling
+- Embedded CSS and JavaScript
+- Professional and production-ready
 
-Generate the complete HTML file with embedded CSS and JavaScript. Make it production-ready.
-Include proper meta tags, semantic HTML, and modern best practices.
-
-Start directly with <!DOCTYPE html> - no explanations before or after the code.
-"""
+Generate ONLY the HTML code, nothing else. Start with <!DOCTYPE html>"""
 
         try:
-            # Generate HTML
-            html_code = await self.api_manager.generate_text(html_prompt, "code", 8000)
+            html_code = await self.api_manager.generate_text(prompt, 8000)
 
-            # Clean up code (remove markdown code blocks if present)
-            html_code = self.clean_code(html_code)
+            # Clean up the response
+            html_code = self._clean_code(html_code)
 
-            # Generate additional files if needed
+            # Ensure it's valid HTML
+            if not html_code.strip().startswith('<!DOCTYPE') and not html_code.strip().startswith('<html'):
+                raise Exception("Generated code is not valid HTML")
+
             files = {
                 'index.html': html_code,
-                'README.md': self.generate_readme(preferences),
+                'README.md': self._generate_readme(project_name, preferences)
             }
-
-            # Generate separate CSS and JS if complexity is advanced
-            if complexity == 'advanced':
-                css_prompt = "Generate advanced CSS with animations and responsive design for the website. Include modern features like CSS Grid, Flexbox, and smooth animations."
-                js_prompt = "Generate JavaScript for interactive features including smooth scrolling, animations, form validation, and dynamic content loading."
-
-                try:
-                    css_code = await self.api_manager.generate_text(css_prompt, "code", 4000)
-                    js_code = await self.api_manager.generate_text(js_prompt, "code", 4000)
-
-                    files['styles.css'] = self.clean_code(css_code)
-                    files['script.js'] = self.clean_code(js_code)
-                except:
-                    pass  # If additional files fail, still return the main HTML
 
             return {
                 'success': True,
                 'files': files,
-                'framework': framework,
-                'complexity': complexity
+                'framework': framework
             }
 
         except Exception as e:
-            # Fallback to a basic template if generation fails
+            # Use high-quality fallback template
             return {
                 'success': True,
                 'files': {
-                    'index.html': self.get_fallback_template(content, design_spec),
-                    'README.md': self.generate_readme(preferences)
+                    'index.html': self._get_fallback_html(project_name, content, design_result),
+                    'README.md': self._generate_readme(project_name, preferences)
                 },
                 'framework': framework,
-                'note': f'Used fallback template due to: {str(e)}'
+                'note': f'Used fallback template: {str(e)}'
             }
 
-    def clean_code(self, code: str) -> str:
+    def _clean_code(self, code: str) -> str:
         """Remove markdown code blocks and clean code"""
         code = code.strip()
 
         # Remove markdown code blocks
-        if code.startswith('```'):
-            lines = code.split('\n')
-            if lines[0].startswith('```'):
-                lines = lines[1:]
-            if lines and lines[-1].startswith('```'):
-                lines = lines[:-1]
-            code = '\n'.join(lines)
+        lines = code.split('\n')
+        if lines[0].startswith('```'):
+            lines = lines[1:]
+        if lines and lines[-1].startswith('```'):
+            lines = lines[:-1]
 
+        code = '\n'.join(lines)
         return code.strip()
 
-    def generate_readme(self, preferences: Dict[str, Any]) -> str:
+    def _generate_readme(self, project_name: str, preferences: Dict) -> str:
         """Generate README file"""
-        return f"""# {preferences.get('project_name', 'Website')}
+        return f"""# {project_name}
 
 Generated by KimiGPT - AI Website Builder
 
@@ -118,172 +97,337 @@ Generated by KimiGPT - AI Website Builder
 - Fully responsive design
 - Modern and clean interface
 - SEO optimized
-- Accessibility compliant
 - Cross-browser compatible
 
 ## Tech Stack
 - Framework: {preferences.get('framework', 'HTML/CSS/JS')}
-- Complexity: {preferences.get('complexity', 'moderate')}
+- Style: {preferences.get('style', 'Modern')}
 
 ## Deployment
-Simply upload all files to your web hosting provider or open index.html in a browser to preview.
+Simply upload all files to your web hosting provider or open index.html to preview.
 
-## Generated On
-{preferences.get('generated_date', 'N/A')}
+## Generated
+{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
 ---
 Built with ❤️ by KimiGPT
 """
 
-    def get_fallback_template(self, content: str, design_spec: str) -> str:
-        """Get fallback HTML template"""
-        return """<!DOCTYPE html>
+    def _get_fallback_html(self, project_name: str, content: str, design_result: Dict) -> str:
+        """Get high-quality fallback HTML template"""
+        color_scheme = design_result.get('color_scheme', 'blue')
+
+        # Color mapping
+        colors = {
+            'blue': {'primary': '#3b82f6', 'secondary': '#1e40af', 'accent': '#60a5fa'},
+            'green': {'primary': '#10b981', 'secondary': '#047857', 'accent': '#34d399'},
+            'purple': {'primary': '#8b5cf6', 'secondary': '#6d28d9', 'accent': '#a78bfa'},
+            'red': {'primary': '#ef4444', 'secondary': '#b91c1c', 'accent': '#f87171'},
+            'orange': {'primary': '#f97316', 'secondary': '#c2410c', 'accent': '#fb923c'}
+        }
+
+        color_set = colors.get(color_scheme.lower(), colors['blue'])
+
+        # Extract content sections
+        content_lines = content.split('\n')
+        hero_headline = project_name
+        hero_subtitle = "Professional Solutions for Your Success"
+
+        for line in content_lines:
+            if 'hero' in line.lower() or 'headline' in line.lower():
+                parts = line.split(':')
+                if len(parts) > 1:
+                    hero_headline = parts[1].strip()
+            elif 'subheadline' in line.lower() or 'subtitle' in line.lower():
+                parts = line.split(':')
+                if len(parts) > 1:
+                    hero_subtitle = parts[1].strip()
+
+        return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to My Website</title>
+    <meta name="description" content="{project_name} - {hero_subtitle}">
+    <title>{project_name}</title>
     <style>
-        * {
+        * {{
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        }
+        }}
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        body {{
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             line-height: 1.6;
             color: #333;
-        }
+            background: #f8f9fa;
+        }}
 
-        .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .hero {{
+            background: linear-gradient(135deg, {color_set['primary']} 0%, {color_set['secondary']} 100%);
             color: white;
-            padding: 100px 20px;
+            padding: 120px 20px 80px;
             text-align: center;
-        }
+            position: relative;
+            overflow: hidden;
+        }}
 
-        .hero h1 {
-            font-size: 3em;
+        .hero::before {{
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="40" fill="rgba(255,255,255,0.03)"/></svg>') repeat;
+            animation: drift 20s infinite linear;
+        }}
+
+        @keyframes drift {{
+            from {{ transform: translateX(0) translateY(0); }}
+            to {{ transform: translateX(100px) translateY(100px); }}
+        }}
+
+        .hero h1 {{
+            font-size: 3.5em;
+            font-weight: 700;
             margin-bottom: 20px;
-        }
+            position: relative;
+            z-index: 1;
+            animation: fadeInDown 1s ease-out;
+        }}
 
-        .hero p {
-            font-size: 1.3em;
-            margin-bottom: 30px;
-            opacity: 0.9;
-        }
+        .hero p {{
+            font-size: 1.4em;
+            margin-bottom: 40px;
+            opacity: 0.95;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }}
 
-        .btn {
+        .cta-button {{
             display: inline-block;
-            padding: 15px 40px;
+            padding: 18px 45px;
             background: white;
-            color: #667eea;
+            color: {color_set['primary']};
             text-decoration: none;
-            border-radius: 30px;
+            border-radius: 50px;
             font-weight: 600;
-            transition: transform 0.3s ease;
-        }
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 1s ease-out 0.6s both;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }}
 
-        .btn:hover {
+        .cta-button:hover {{
             transform: translateY(-3px);
-        }
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }}
 
-        .container {
+        .container {{
             max-width: 1200px;
             margin: 0 auto;
             padding: 80px 20px;
-        }
+        }}
 
-        .section-title {
+        .section-title {{
             text-align: center;
-            font-size: 2.5em;
-            margin-bottom: 50px;
-        }
+            font-size: 2.8em;
+            font-weight: 700;
+            margin-bottom: 60px;
+            color: #1a202c;
+        }}
 
-        .features {
+        .features {{
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 40px;
-        }
+            margin-top: 50px;
+        }}
 
-        .feature-card {
-            padding: 30px;
-            background: #f8f9fa;
+        .feature-card {{
+            padding: 40px;
+            background: white;
             border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }}
+
+        .feature-card::before {{
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, {color_set['primary']}, {color_set['accent']});
+            transform: scaleX(0);
             transition: transform 0.3s ease;
-        }
+        }}
 
-        .feature-card:hover {
+        .feature-card:hover {{
             transform: translateY(-10px);
-        }
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }}
 
-        .feature-card h3 {
-            font-size: 1.5em;
+        .feature-card:hover::before {{
+            transform: scaleX(1);
+        }}
+
+        .feature-card h3 {{
+            font-size: 1.6em;
             margin-bottom: 15px;
-            color: #667eea;
-        }
+            color: {color_set['primary']};
+            font-weight: 600;
+        }}
 
-        footer {
-            background: #2d3748;
+        .feature-card p {{
+            color: #64748b;
+            line-height: 1.7;
+            font-size: 1.05em;
+        }}
+
+        footer {{
+            background: #1a202c;
             color: white;
             text-align: center;
-            padding: 40px 20px;
-        }
+            padding: 50px 20px;
+            margin-top: 80px;
+        }}
 
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2em;
-            }
+        footer h3 {{
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }}
 
-            .features {
+        footer p {{
+            margin: 10px 0;
+            opacity: 0.9;
+        }}
+
+        @keyframes fadeInDown {{
+            from {{
+                opacity: 0;
+                transform: translateY(-30px);
+            }}
+            to {{
+                opacity: 1;
+                transform: translateY(0);
+            }}
+        }}
+
+        @keyframes fadeInUp {{
+            from {{
+                opacity: 0;
+                transform: translateY(30px);
+            }}
+            to {{
+                opacity: 1;
+                transform: translateY(0);
+            }}
+        }}
+
+        @media (max-width: 768px) {{
+            .hero h1 {{
+                font-size: 2.2em;
+            }}
+
+            .hero p {{
+                font-size: 1.1em;
+            }}
+
+            .features {{
                 grid-template-columns: 1fr;
-            }
-        }
+            }}
+        }}
     </style>
 </head>
 <body>
     <section class="hero">
-        <h1>Welcome to Your Website</h1>
-        <p>Professional solutions for your business</p>
-        <a href="#contact" class="btn">Get Started</a>
+        <h1>{hero_headline}</h1>
+        <p>{hero_subtitle}</p>
+        <a href="#features" class="cta-button">Explore Features</a>
     </section>
 
     <div class="container">
-        <h2 class="section-title">Our Services</h2>
+        <h2 class="section-title" id="features">Our Amazing Features</h2>
         <div class="features">
             <div class="feature-card">
-                <h3>🚀 Feature One</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.</p>
+                <h3>🚀 Fast & Efficient</h3>
+                <p>Lightning-fast performance optimized for the best user experience. Built with modern web technologies and best practices.</p>
             </div>
             <div class="feature-card">
-                <h3>💡 Feature Two</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.</p>
+                <h3>💡 Innovative Design</h3>
+                <p>Beautiful, modern interface that captures attention and provides intuitive navigation. Designed with your users in mind.</p>
             </div>
             <div class="feature-card">
-                <h3>✨ Feature Three</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.</p>
+                <h3>📱 Fully Responsive</h3>
+                <p>Perfect viewing experience across all devices - from mobile phones to large desktop monitors. Adapts seamlessly.</p>
+            </div>
+            <div class="feature-card">
+                <h3>🔒 Secure & Reliable</h3>
+                <p>Built with security best practices to protect your data and provide a trustworthy platform for your users.</p>
+            </div>
+            <div class="feature-card">
+                <h3>⚡ High Performance</h3>
+                <p>Optimized code and efficient architecture ensure fast loading times and smooth interactions throughout.</p>
+            </div>
+            <div class="feature-card">
+                <h3>🎯 User-Focused</h3>
+                <p>Every element designed with user experience in mind. Accessibility compliant and easy to navigate.</p>
             </div>
         </div>
     </div>
 
     <footer>
-        <p>&copy; 2024 Your Website. All rights reserved.</p>
-        <p>Generated by KimiGPT - AI Website Builder</p>
+        <h3>{project_name}</h3>
+        <p>Built with modern web technologies</p>
+        <p>&copy; {datetime.now().year} {project_name}. All rights reserved.</p>
+        <p style="opacity: 0.6; margin-top: 20px; font-size: 0.9em;">Generated by KimiGPT - AI Website Builder</p>
     </footer>
 
     <script>
         // Smooth scrolling
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {{
+            anchor.addEventListener('click', function (e) {{
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth' });
-                }
-            });
-        });
+                if (target) {{
+                    target.scrollIntoView({{ behavior: 'smooth', block: 'start' }});
+                }}
+            }});
+        }});
+
+        // Scroll animations
+        const observerOptions = {{
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        }};
+
+        const observer = new IntersectionObserver((entries) => {{
+            entries.forEach(entry => {{
+                if (entry.isIntersecting) {{
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }}
+            }});
+        }}, observerOptions);
+
+        document.querySelectorAll('.feature-card').forEach(card => {{
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'all 0.6s ease-out';
+            observer.observe(card);
+        }});
     </script>
 </body>
-</html>
-"""
+</html>"""
