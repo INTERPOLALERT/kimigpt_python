@@ -763,6 +763,9 @@ class GeneratorWidget(QWidget):
 
     def generation_finished(self, result):
         """Handle generation completion"""
+        # CRITICAL: Update project_id from result to show the NEW website
+        self.current_project_id = result.get('project_id', self.current_project_id)
+
         self.progress_group.setVisible(False)
         self.result_group.setVisible(True)
         self.generate_btn.setEnabled(True)
