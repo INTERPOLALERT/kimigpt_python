@@ -6,7 +6,7 @@ Allows users to configure API keys for various AI services
 from PyQt6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit,
     QPushButton, QGroupBox, QScrollArea, QFrame, QMessageBox,
-    QTextBrowser
+    QTextBrowser, QCheckBox
 )
 from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtGui import QFont
@@ -23,6 +23,7 @@ class APIConfigWidget(QWidget):
         self.parent = parent
         self.config_manager = ConfigManager()
         self.api_inputs = {}
+        self.api_enabled = {}  # Track enabled/disabled state
         self.init_ui()
         self.load_existing_keys()
 
@@ -212,6 +213,42 @@ class APIConfigWidget(QWidget):
         layout = QVBoxLayout(group)
         layout.setSpacing(14)
 
+        # Enabled/Disabled toggle at the top
+        toggle_layout = QHBoxLayout()
+        enabled_checkbox = QCheckBox("Enable this API")
+        enabled_checkbox.setFont(QFont("Segoe UI", 13, QFont.Weight.DemiBold))
+        enabled_checkbox.setStyleSheet("""
+            QCheckBox {
+                color: #6366f1;
+                spacing: 8px;
+            }
+            QCheckBox::indicator {
+                width: 24px;
+                height: 24px;
+            }
+        """)
+        enabled_checkbox.setChecked(True)  # Default to enabled
+        self.api_enabled[api['key']] = enabled_checkbox
+
+        status_label = QLabel("🟢 ACTIVE")
+        status_label.setFont(QFont("Segoe UI", 12, QFont.Weight.Bold))
+        status_label.setStyleSheet("color: #16a34a;")
+
+        def update_status():
+            if enabled_checkbox.isChecked():
+                status_label.setText("🟢 ACTIVE")
+                status_label.setStyleSheet("color: #16a34a;")
+            else:
+                status_label.setText("🔴 DISABLED")
+                status_label.setStyleSheet("color: #dc2626;")
+
+        enabled_checkbox.toggled.connect(update_status)
+
+        toggle_layout.addWidget(enabled_checkbox)
+        toggle_layout.addWidget(status_label)
+        toggle_layout.addStretch()
+        layout.addLayout(toggle_layout)
+
         # Description
         desc_label = QLabel(api['description'])
         desc_label.setFont(QFont("Segoe UI", 12))
@@ -272,30 +309,52 @@ class APIConfigWidget(QWidget):
         webbrowser.open(url)
 
     def load_existing_keys(self):
-        """Load existing API keys from configuration"""
+        """Load existing API keys and enabled states from configuration"""
         config = self.config_manager.load_config()
         api_keys = config.get('api_keys', {})
+        api_enabled = config.get('api_enabled', {})
 
         for key_name, input_field in self.api_inputs.items():
             if key_name in api_keys and api_keys[key_name]:
                 input_field.setText(api_keys[key_name])
 
+        # Load enabled/disabled state
+        for key_name, checkbox in self.api_enabled.items():
+            # Default to enabled (True) if not specified
+            is_enabled = api_enabled.get(key_name, True)
+            checkbox.setChecked(is_enabled)
+
     def save_api_keys(self):
-        """Save API keys to configuration"""
+        """Save API keys and enabled states to configuration"""
         api_keys = {}
         for key_name, input_field in self.api_inputs.items():
             key_value = input_field.text().strip()
             if key_value:
                 api_keys[key_name] = key_value
 
-        self.config_manager.save_api_keys(api_keys)
+        # Save enabled/disabled state for each API
+        api_enabled = {}
+        for key_name, checkbox in self.api_enabled.items():
+            api_enabled[key_name] = checkbox.isChecked()
+
+        # Save both to config
+        config = self.config_manager.load_config()
+        config['api_keys'] = api_keys
+        config['api_enabled'] = api_enabled
+        self.config_manager.save_config(config)
+
         self.api_keys_updated.emit()
+
+        # Count enabled APIs
+        enabled_count = sum(1 for k, v in api_keys.items() if v and api_enabled.get(k, True))
 
         QMessageBox.information(
             self,
             "Success",
-            "API keys saved successfully!\n\nYour keys are stored securely in:\n"
-            f"{self.config_manager.config_file}"
+            f"API keys saved successfully!\n\n"
+            f"Configured: {len(api_keys)} API(s)\n"
+            f"Enabled: {enabled_count} API(s)\n\n"
+            f"Your keys are stored securely in:\n{self.config_manager.config_file}"
         )
 
     def test_api_connections(self):
