@@ -1,0 +1,32 @@
+# KimiGPT Desktop Application Requirements
+# Python 3.9+ required
+
+# GUI Framework
+PyQt6==6.6.1
+PyQt6-Qt6==6.6.1
+PyQt6-sip==13.6.0
+
+# AI APIs (Completely Free Tier)
+anthropic==0.8.1
+google-generativeai==0.3.2
+groq==0.4.2
+openai==1.6.1
+cohere==4.37
+
+# HTTP and API Communication
+requests==2.31.0
+aiohttp==3.9.1
+httpx==0.25.2
+
+# Utilities
+python-dotenv==1.0.0
+pyyaml==6.0.1
+
+# File Operations
+Pillow==10.1.0
+
+# Data Handling
+python-dateutil==2.8.2
+
+# Logging and Monitoring
+colorama==0.4.6
