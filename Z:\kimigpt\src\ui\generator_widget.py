@@ -102,8 +102,8 @@ class GeneratorWidget(QWidget):
     def init_ui(self):
         """Initialize the generator UI"""
         main_layout = QHBoxLayout(self)
-        main_layout.setContentsMargins(40, 40, 40, 40)
-        main_layout.setSpacing(30)
+        main_layout.setContentsMargins(50, 50, 50, 50)
+        main_layout.setSpacing(35)
 
         # Left column - Input form
         left_column = self.create_input_form()
@@ -121,7 +121,7 @@ class GeneratorWidget(QWidget):
 
         container = QWidget()
         layout = QVBoxLayout(container)
-        layout.setSpacing(25)
+        layout.setSpacing(30)
 
         # Title
         title = QLabel("🚀 AI Website Generator")
@@ -143,7 +143,7 @@ class GeneratorWidget(QWidget):
         self.project_name_input = QLineEdit()
         self.project_name_input.setPlaceholderText("My Awesome Website")
         self.project_name_input.setText(f"Website_{datetime.now().strftime('%Y%m%d_%H%M%S')}")
-        self.project_name_input.setMinimumHeight(40)
+        self.project_name_input.setMinimumHeight(45)
         project_layout.addWidget(self.project_name_input)
         layout.addWidget(project_group)
 
@@ -160,14 +160,14 @@ class GeneratorWidget(QWidget):
             "animations. The website should be fully responsive and SEO-optimized.\n\n"
             "Be specific about style, colors, sections, and functionality you want!"
         )
-        self.prompt_input.setMinimumHeight(150)
-        self.prompt_input.setFont(QFont("Segoe UI", 11))
+        self.prompt_input.setMinimumHeight(180)
+        self.prompt_input.setFont(QFont("Segoe UI", 12))
         prompt_layout.addWidget(self.prompt_input)
 
         # Example prompts
         examples_label = QLabel("💡 Quick Examples:")
-        examples_label.setFont(QFont("Segoe UI", 10, QFont.Weight.DemiBold))
-        examples_label.setStyleSheet("color: #667eea; margin-top: 10px;")
+        examples_label.setFont(QFont("Segoe UI", 11, QFont.Weight.DemiBold))
+        examples_label.setStyleSheet("color: #6366f1; margin-top: 12px;")
         prompt_layout.addWidget(examples_label)
 
         examples = [
@@ -182,8 +182,9 @@ class GeneratorWidget(QWidget):
             example_btn.setStyleSheet("""
                 QPushButton {
                     text-align: left;
-                    padding: 8px 12px;
-                    font-size: 11px;
+                    padding: 10px 14px;
+                    font-size: 12px;
+                    min-height: 38px;
                 }
             """)
             example_btn.clicked.connect(lambda checked, text=example: self.prompt_input.setText(text))
@@ -198,12 +199,12 @@ class GeneratorWidget(QWidget):
         file_btn_layout = QHBoxLayout()
         upload_btn = QPushButton("📁 Add Files")
         upload_btn.setObjectName("secondaryButton")
-        upload_btn.setMinimumHeight(40)
+        upload_btn.setMinimumHeight(45)
         upload_btn.clicked.connect(self.upload_files)
 
         clear_files_btn = QPushButton("🗑️ Clear")
         clear_files_btn.setObjectName("secondaryButton")
-        clear_files_btn.setMinimumHeight(40)
+        clear_files_btn.setMinimumHeight(45)
         clear_files_btn.clicked.connect(self.clear_files)
 
         file_btn_layout.addWidget(upload_btn)
@@ -237,8 +238,8 @@ class GeneratorWidget(QWidget):
 
         # === DESIGN & STYLE ===
         design_section = QLabel("🎨 DESIGN & STYLE")
-        design_section.setFont(QFont("Segoe UI", 11, QFont.Weight.Bold))
-        design_section.setStyleSheet("color: #667eea; margin-top: 10px;")
+        design_section.setFont(QFont("Segoe UI", 12, QFont.Weight.Bold))
+        design_section.setStyleSheet("color: #6366f1; margin-top: 12px; margin-bottom: 8px;")
         advanced_layout.addWidget(design_section)
 
         # Style selection
@@ -298,8 +299,8 @@ class GeneratorWidget(QWidget):
 
         # === FEATURES & FUNCTIONALITY ===
         features_section = QLabel("⚙️ FEATURES & FUNCTIONALITY")
-        features_section.setFont(QFont("Segoe UI", 11, QFont.Weight.Bold))
-        features_section.setStyleSheet("color: #667eea; margin-top: 15px;")
+        features_section.setFont(QFont("Segoe UI", 12, QFont.Weight.Bold))
+        features_section.setStyleSheet("color: #6366f1; margin-top: 18px; margin-bottom: 8px;")
         advanced_layout.addWidget(features_section)
 
         # Complexity
@@ -376,8 +377,8 @@ class GeneratorWidget(QWidget):
 
         # === OPTIMIZATION ===
         optimization_section = QLabel("🚀 OPTIMIZATION")
-        optimization_section.setFont(QFont("Segoe UI", 11, QFont.Weight.Bold))
-        optimization_section.setStyleSheet("color: #667eea; margin-top: 15px;")
+        optimization_section.setFont(QFont("Segoe UI", 12, QFont.Weight.Bold))
+        optimization_section.setStyleSheet("color: #6366f1; margin-top: 18px; margin-bottom: 8px;")
         advanced_layout.addWidget(optimization_section)
 
         # SEO level
@@ -438,8 +439,8 @@ class GeneratorWidget(QWidget):
 
         # === TECHNOLOGY ===
         tech_section = QLabel("💻 TECHNOLOGY")
-        tech_section.setFont(QFont("Segoe UI", 11, QFont.Weight.Bold))
-        tech_section.setStyleSheet("color: #667eea; margin-top: 15px;")
+        tech_section.setFont(QFont("Segoe UI", 12, QFont.Weight.Bold))
+        tech_section.setStyleSheet("color: #6366f1; margin-top: 18px; margin-bottom: 8px;")
         advanced_layout.addWidget(tech_section)
 
         # Framework
@@ -469,8 +470,8 @@ class GeneratorWidget(QWidget):
 
         # === ANALYTICS & TRACKING ===
         analytics_section = QLabel("📊 ANALYTICS & TRACKING")
-        analytics_section.setFont(QFont("Segoe UI", 11, QFont.Weight.Bold))
-        analytics_section.setStyleSheet("color: #667eea; margin-top: 15px;")
+        analytics_section.setFont(QFont("Segoe UI", 12, QFont.Weight.Bold))
+        analytics_section.setStyleSheet("color: #6366f1; margin-top: 18px; margin-bottom: 8px;")
         advanced_layout.addWidget(analytics_section)
 
         # Analytics integration
@@ -498,8 +499,8 @@ class GeneratorWidget(QWidget):
         # Generate button
         self.generate_btn = QPushButton("✨ Generate My Website")
         self.generate_btn.setObjectName("primaryButton")
-        self.generate_btn.setMinimumHeight(55)
-        self.generate_btn.setFont(QFont("Segoe UI", 15, QFont.Weight.Bold))
+        self.generate_btn.setMinimumHeight(60)
+        self.generate_btn.setFont(QFont("Segoe UI", 16, QFont.Weight.Bold))
         self.generate_btn.clicked.connect(self.start_generation)
         layout.addWidget(self.generate_btn)
 
@@ -511,7 +512,7 @@ class GeneratorWidget(QWidget):
         """Create the status panel"""
         container = QWidget()
         layout = QVBoxLayout(container)
-        layout.setSpacing(20)
+        layout.setSpacing(25)
 
         # Generation progress
         self.progress_group = QGroupBox("⚙️ Generation Progress")
@@ -555,15 +556,19 @@ class GeneratorWidget(QWidget):
         time_frame = QFrame()
         time_frame.setStyleSheet("""
             QFrame {
-                background-color: #dbeafe;
-                border-radius: 8px;
-                padding: 12px;
+                background: qlineargradient(
+                    x1:0, y1:0, x2:0, y2:1,
+                    stop:0 #e0e7ff, stop:1 #ddd6fe
+                );
+                border: 2px solid #c7d2fe;
+                border-radius: 10px;
+                padding: 14px;
             }
         """)
         time_layout = QVBoxLayout(time_frame)
         time_label = QLabel("⏱️ Estimated time: 30-60 seconds")
-        time_label.setFont(QFont("Segoe UI", 10))
-        time_label.setStyleSheet("color: #1e40af;")
+        time_label.setFont(QFont("Segoe UI", 11, QFont.Weight.DemiBold))
+        time_label.setStyleSheet("color: #4338ca;")
         time_layout.addWidget(time_label)
         progress_layout.addWidget(time_frame)
 
@@ -589,19 +594,22 @@ class GeneratorWidget(QWidget):
         # Action buttons
         self.preview_btn = QPushButton("👁️ Preview Website")
         self.preview_btn.setObjectName("primaryButton")
-        self.preview_btn.setMinimumHeight(45)
+        self.preview_btn.setMinimumHeight(50)
+        self.preview_btn.setFont(QFont("Segoe UI", 13, QFont.Weight.Bold))
         self.preview_btn.clicked.connect(self.preview_website)
         result_layout.addWidget(self.preview_btn)
 
         self.download_btn = QPushButton("📦 Download ZIP")
         self.download_btn.setObjectName("secondaryButton")
-        self.download_btn.setMinimumHeight(45)
+        self.download_btn.setMinimumHeight(50)
+        self.download_btn.setFont(QFont("Segoe UI", 13, QFont.Weight.Bold))
         self.download_btn.clicked.connect(self.download_website)
         result_layout.addWidget(self.download_btn)
 
         self.open_folder_btn = QPushButton("📁 Open Folder")
         self.open_folder_btn.setObjectName("secondaryButton")
-        self.open_folder_btn.setMinimumHeight(45)
+        self.open_folder_btn.setMinimumHeight(50)
+        self.open_folder_btn.setFont(QFont("Segoe UI", 13, QFont.Weight.Bold))
         self.open_folder_btn.clicked.connect(self.open_output_folder)
         result_layout.addWidget(self.open_folder_btn)
 

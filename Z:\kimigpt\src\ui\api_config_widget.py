@@ -29,8 +29,8 @@ class APIConfigWidget(QWidget):
     def init_ui(self):
         """Initialize the API configuration UI"""
         main_layout = QVBoxLayout(self)
-        main_layout.setContentsMargins(40, 40, 40, 40)
-        main_layout.setSpacing(30)
+        main_layout.setContentsMargins(50, 50, 50, 50)
+        main_layout.setSpacing(35)
 
         # Title section
         title_layout = QVBoxLayout()
@@ -59,7 +59,7 @@ class APIConfigWidget(QWidget):
 
         scroll_content = QWidget()
         scroll_layout = QVBoxLayout(scroll_content)
-        scroll_layout.setSpacing(20)
+        scroll_layout.setSpacing(25)
 
         # API configurations
         apis = [
@@ -173,24 +173,27 @@ class APIConfigWidget(QWidget):
 
         # Action buttons
         button_layout = QHBoxLayout()
-        button_layout.setSpacing(15)
+        button_layout.setSpacing(18)
 
         save_btn = QPushButton("💾 Save API Keys")
         save_btn.setObjectName("primaryButton")
-        save_btn.setMinimumHeight(45)
-        save_btn.setMinimumWidth(150)
+        save_btn.setMinimumHeight(55)
+        save_btn.setMinimumWidth(180)
+        save_btn.setFont(QFont("Segoe UI", 14, QFont.Weight.Bold))
         save_btn.clicked.connect(self.save_api_keys)
 
         test_btn = QPushButton("🧪 Test Connections")
         test_btn.setObjectName("secondaryButton")
-        test_btn.setMinimumHeight(45)
-        test_btn.setMinimumWidth(150)
+        test_btn.setMinimumHeight(55)
+        test_btn.setMinimumWidth(180)
+        test_btn.setFont(QFont("Segoe UI", 14, QFont.Weight.Bold))
         test_btn.clicked.connect(self.test_api_connections)
 
         clear_btn = QPushButton("🗑️ Clear All")
         clear_btn.setObjectName("secondaryButton")
-        clear_btn.setMinimumHeight(45)
-        clear_btn.setMinimumWidth(120)
+        clear_btn.setMinimumHeight(55)
+        clear_btn.setMinimumWidth(140)
+        clear_btn.setFont(QFont("Segoe UI", 14, QFont.Weight.Bold))
         clear_btn.clicked.connect(self.clear_all_keys)
 
         button_layout.addStretch()
@@ -204,15 +207,15 @@ class APIConfigWidget(QWidget):
     def create_api_group(self, api):
         """Create API configuration group"""
         group = QGroupBox(f"{api['emoji']} {api['name']}")
-        group.setFont(QFont("Segoe UI", 13, QFont.Weight.DemiBold))
+        group.setFont(QFont("Segoe UI", 14, QFont.Weight.Bold))
 
         layout = QVBoxLayout(group)
-        layout.setSpacing(12)
+        layout.setSpacing(14)
 
         # Description
         desc_label = QLabel(api['description'])
-        desc_label.setFont(QFont("Segoe UI", 11))
-        desc_label.setStyleSheet("color: #6b7280;")
+        desc_label.setFont(QFont("Segoe UI", 12))
+        desc_label.setStyleSheet("color: #64748b;")
         desc_label.setWordWrap(True)
         layout.addWidget(desc_label)
 
@@ -224,15 +227,16 @@ class APIConfigWidget(QWidget):
         api_input = QLineEdit()
         api_input.setPlaceholderText(f"Enter your {api['name']} API key...")
         api_input.setEchoMode(QLineEdit.EchoMode.Password)
-        api_input.setMinimumHeight(40)
-        api_input.setFont(QFont("Courier New", 10))
+        api_input.setMinimumHeight(45)
+        api_input.setFont(QFont("Courier New", 11))
         self.api_inputs[api['key']] = api_input
 
         # Show/Hide button
         show_btn = QPushButton("👁️ Show")
         show_btn.setObjectName("secondaryButton")
-        show_btn.setMaximumWidth(80)
-        show_btn.setMinimumHeight(40)
+        show_btn.setMaximumWidth(90)
+        show_btn.setMinimumHeight(45)
+        show_btn.setFont(QFont("Segoe UI", 11, QFont.Weight.DemiBold))
         show_btn.clicked.connect(
             lambda checked, inp=api_input, btn=show_btn: self.toggle_visibility(inp, btn)
         )
@@ -240,8 +244,9 @@ class APIConfigWidget(QWidget):
         # Get API Key button
         get_key_btn = QPushButton("🔗 Get API Key")
         get_key_btn.setObjectName("secondaryButton")
-        get_key_btn.setMaximumWidth(120)
-        get_key_btn.setMinimumHeight(40)
+        get_key_btn.setMaximumWidth(135)
+        get_key_btn.setMinimumHeight(45)
+        get_key_btn.setFont(QFont("Segoe UI", 11, QFont.Weight.DemiBold))
         get_key_btn.clicked.connect(lambda checked, url=api['url']: self.open_url(url))
 
         input_layout.addWidget(api_input, stretch=1)
