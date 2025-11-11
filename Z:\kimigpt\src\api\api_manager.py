@@ -42,9 +42,11 @@ class APIManager:
     def setup_apis(self):
         """Initialize all available APIs (FREE TIER ONLY)"""
         api_keys = self.config_manager.get_all_api_keys()
+        config = self.config_manager.load_config()
+        api_enabled = config.get('api_enabled', {})
 
         # Anthropic Claude
-        if api_keys.get('ANTHROPIC_API_KEY'):
+        if api_keys.get('ANTHROPIC_API_KEY') and api_enabled.get('ANTHROPIC_API_KEY', True):
             self.apis['anthropic'] = {
                 'key': api_keys['ANTHROPIC_API_KEY'],
                 'base_url': 'https://api.anthropic.com/v1',
@@ -54,7 +56,7 @@ class APIManager:
             }
 
         # Google Gemini
-        if api_keys.get('GEMINI_API_KEY'):
+        if api_keys.get('GEMINI_API_KEY') and api_enabled.get('GEMINI_API_KEY', True):
             self.apis['gemini'] = {
                 'key': api_keys['GEMINI_API_KEY'],
                 'base_url': 'https://generativelanguage.googleapis.com/v1beta',
@@ -64,7 +66,7 @@ class APIManager:
             }
 
         # Groq (Most generous free tier!)
-        if api_keys.get('GROQ_API_KEY'):
+        if api_keys.get('GROQ_API_KEY') and api_enabled.get('GROQ_API_KEY', True):
             self.apis['groq'] = {
                 'key': api_keys['GROQ_API_KEY'],
                 'base_url': 'https://api.groq.com/openai/v1',
@@ -74,7 +76,7 @@ class APIManager:
             }
 
         # DeepSeek
-        if api_keys.get('DEEPSEEK_API_KEY'):
+        if api_keys.get('DEEPSEEK_API_KEY') and api_enabled.get('DEEPSEEK_API_KEY', True):
             self.apis['deepseek'] = {
                 'key': api_keys['DEEPSEEK_API_KEY'],
                 'base_url': 'https://api.deepseek.com/v1',
@@ -84,7 +86,7 @@ class APIManager:
             }
 
         # OpenRouter
-        if api_keys.get('OPENROUTER_API_KEY'):
+        if api_keys.get('OPENROUTER_API_KEY') and api_enabled.get('OPENROUTER_API_KEY', True):
             self.apis['openrouter'] = {
                 'key': api_keys['OPENROUTER_API_KEY'],
                 'base_url': 'https://openrouter.ai/api/v1',
@@ -94,7 +96,7 @@ class APIManager:
             }
 
         # Cohere
-        if api_keys.get('COHERE_API_KEY'):
+        if api_keys.get('COHERE_API_KEY') and api_enabled.get('COHERE_API_KEY', True):
             self.apis['cohere'] = {
                 'key': api_keys['COHERE_API_KEY'],
                 'base_url': 'https://api.cohere.ai/v1',
@@ -104,7 +106,7 @@ class APIManager:
             }
 
         # Together AI (Most generous free tier!)
-        if api_keys.get('TOGETHER_API_KEY'):
+        if api_keys.get('TOGETHER_API_KEY') and api_enabled.get('TOGETHER_API_KEY', True):
             self.apis['together'] = {
                 'key': api_keys['TOGETHER_API_KEY'],
                 'base_url': 'https://api.together.xyz/v1',
@@ -114,7 +116,7 @@ class APIManager:
             }
 
         # Perplexity AI
-        if api_keys.get('PERPLEXITY_API_KEY'):
+        if api_keys.get('PERPLEXITY_API_KEY') and api_enabled.get('PERPLEXITY_API_KEY', True):
             self.apis['perplexity'] = {
                 'key': api_keys['PERPLEXITY_API_KEY'],
                 'base_url': 'https://api.perplexity.ai',
@@ -124,7 +126,7 @@ class APIManager:
             }
 
         # Replicate
-        if api_keys.get('REPLICATE_API_KEY'):
+        if api_keys.get('REPLICATE_API_KEY') and api_enabled.get('REPLICATE_API_KEY', True):
             self.apis['replicate'] = {
                 'key': api_keys['REPLICATE_API_KEY'],
                 'base_url': 'https://api.replicate.com/v1',
@@ -134,7 +136,7 @@ class APIManager:
             }
 
         # AI21 Labs
-        if api_keys.get('AI21_API_KEY'):
+        if api_keys.get('AI21_API_KEY') and api_enabled.get('AI21_API_KEY', True):
             self.apis['ai21'] = {
                 'key': api_keys['AI21_API_KEY'],
                 'base_url': 'https://api.ai21.com/studio/v1',

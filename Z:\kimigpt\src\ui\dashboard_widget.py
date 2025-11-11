@@ -9,6 +9,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
+from src.core.config_manager import ConfigManager
 
 
 class DashboardWidget(QWidget):
@@ -17,6 +18,7 @@ class DashboardWidget(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.parent = parent
+        self.config_manager = ConfigManager()
         self.init_ui()
 
     def init_ui(self):
@@ -28,6 +30,11 @@ class DashboardWidget(QWidget):
         # Hero Section
         hero_section = self.create_hero_section()
         main_layout.addWidget(hero_section)
+
+        # API Status Warning (if no APIs configured)
+        api_warning = self.create_api_warning()
+        if api_warning:
+            main_layout.addWidget(api_warning)
 
         # Statistics Section
         stats_section = self.create_stats_section()
@@ -101,6 +108,105 @@ class DashboardWidget(QWidget):
         layout.addLayout(subtitle_container)
         layout.addSpacing(20)
         layout.addLayout(button_layout)
+
+        return frame
+
+    def create_api_warning(self):
+        """Create API warning banner if no APIs are configured"""
+        # Check if any APIs are configured
+        api_keys = self.config_manager.get_all_api_keys()
+        enabled_apis = [k for k, v in api_keys.items() if v and v.strip()]
+
+        if enabled_apis:
+            # APIs are configured, no warning needed
+            return None
+
+        # Create prominent warning banner
+        frame = QFrame()
+        frame.setStyleSheet("""
+            QFrame {
+                background: qlineargradient(
+                    x1:0, y1:0, x2:1, y2:0,
+                    stop:0 #fee2e2, stop:1 #fef3c7
+                );
+                border: 3px solid #dc2626;
+                border-radius: 16px;
+                padding: 30px;
+            }
+        """)
+
+        layout = QVBoxLayout(frame)
+        layout.setSpacing(20)
+
+        # Warning icon and title
+        title_layout = QHBoxLayout()
+        warning_icon = QLabel("⚠️")
+        warning_icon.setFont(QFont("Segoe UI", 32))
+
+        title = QLabel("NO AI APIs CONFIGURED!")
+        title.setFont(QFont("Segoe UI", 24, QFont.Weight.Bold))
+        title.setStyleSheet("color: #dc2626;")
+
+        title_layout.addStretch()
+        title_layout.addWidget(warning_icon)
+        title_layout.addWidget(title)
+        title_layout.addStretch()
+
+        # Warning message
+        message = QLabel(
+            "Your app is currently generating websites using basic templates only.\n\n"
+            "To unlock REAL AI-powered website generation, you need to configure at least ONE free API key.\n"
+            "Without APIs, all websites will look the same and generation will be instant (< 1 minute).\n\n"
+            "With AI APIs, generation takes 1-3 minutes but creates CUSTOM, PROFESSIONAL websites!"
+        )
+        message.setFont(QFont("Segoe UI", 14))
+        message.setStyleSheet("color: #991b1b; line-height: 1.8;")
+        message.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        message.setWordWrap(True)
+
+        # Recommended APIs
+        recommend = QLabel(
+            "🚀 RECOMMENDED FREE APIs:\n"
+            "• Groq (14,400 requests/day - MOST GENEROUS!)\n"
+            "• Google Gemini (60 requests/min)\n"
+            "• Anthropic Claude ($5 free credit)"
+        )
+        recommend.setFont(QFont("Segoe UI", 13, QFont.Weight.DemiBold))
+        recommend.setStyleSheet("color: #7c2d12; background: rgba(255,255,255,0.5); padding: 15px; border-radius: 10px;")
+        recommend.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        # Action button
+        action_btn = QPushButton("⚙️ Configure API Keys Now")
+        action_btn.setObjectName("primaryButton")
+        action_btn.setMinimumHeight(55)
+        action_btn.setMinimumWidth(250)
+        action_btn.setFont(QFont("Segoe UI", 16, QFont.Weight.Bold))
+        action_btn.setStyleSheet("""
+            QPushButton {
+                background: qlineargradient(
+                    x1:0, y1:0, x2:1, y2:0,
+                    stop:0 #dc2626, stop:1 #b91c1c
+                );
+            }
+            QPushButton:hover {
+                background: qlineargradient(
+                    x1:0, y1:0, x2:1, y2:0,
+                    stop:0 #b91c1c, stop:1 #991b1b
+                );
+            }
+        """)
+        action_btn.clicked.connect(lambda: self.parent.tabs.setCurrentIndex(2))
+
+        # Add to layout
+        layout.addLayout(title_layout)
+        layout.addWidget(message)
+        layout.addWidget(recommend)
+
+        btn_container = QHBoxLayout()
+        btn_container.addStretch()
+        btn_container.addWidget(action_btn)
+        btn_container.addStretch()
+        layout.addLayout(btn_container)
 
         return frame
 
