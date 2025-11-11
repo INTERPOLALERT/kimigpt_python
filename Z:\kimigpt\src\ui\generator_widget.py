@@ -31,6 +31,8 @@ class GenerationThread(QThread):
         """Run the generation process"""
         try:
             from src.agents.orchestrator import OrchestratorAgent
+            import asyncio
+            import sys
 
             # Initialize orchestrator
             self.progress_updated.emit(10, "Initializing AI agents...")
@@ -39,23 +41,51 @@ class GenerationThread(QThread):
             # Start generation
             self.progress_updated.emit(20, "Processing your request...")
 
-            import asyncio
+            # Windows-specific asyncio setup for threads
+            # This prevents the set_wakeup_fd error
+            if sys.platform == 'win32':
+                # Set the event loop policy to avoid set_wakeup_fd issues
+                asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
+            # Create new event loop for this thread
             loop = asyncio.new_event_loop()
             asyncio.set_event_loop(loop)
 
-            result = loop.run_until_complete(
-                orchestrator.process(self.input_data, self.progress_updated, self.agent_status_updated)
-            )
+            try:
+                # Run the async process
+                result = loop.run_until_complete(
+                    orchestrator.process(
+                        self.input_data,
+                        self.emit_progress,
+                        self.emit_agent_status
+                    )
+                )
 
-            loop.close()
-
-            if result.get('success', False):
-                self.generation_complete.emit(result)
-            else:
-                self.generation_error.emit(result.get('error', 'Unknown error occurred'))
+                if result.get('success', False):
+                    self.generation_complete.emit(result)
+                else:
+                    self.generation_error.emit(result.get('error', 'Unknown error occurred'))
+            finally:
+                loop.close()
 
         except Exception as e:
-            self.generation_error.emit(str(e))
+            import traceback
+            error_msg = f"{str(e)}\n\nDetails: {traceback.format_exc()}"
+            self.generation_error.emit(error_msg)
+
+    def emit_progress(self, value, message):
+        """Safe progress emission"""
+        try:
+            self.progress_updated.emit(value, message)
+        except:
+            pass
+
+    def emit_agent_status(self, agent, status):
+        """Safe agent status emission"""
+        try:
+            self.agent_status_updated.emit(agent, status)
+        except:
+            pass
 
 
 class GeneratorWidget(QWidget):
