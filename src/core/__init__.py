@@ -1,3 +1,3 @@
 """
-Core Components for KimiGPT
+Core Components for WebsiteNow
 """

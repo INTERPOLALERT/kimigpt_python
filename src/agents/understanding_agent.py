@@ -1,5 +1,5 @@
 """
-Understanding Agent for KimiGPT - FIXED VERSION
+Understanding Agent for WebsiteNow - FIXED VERSION
 Analyzes user input and extracts requirements
 """
 

@@ -1,8 +1,8 @@
-# 🚀 KimiGPT Desktop - AI Website Builder
+# 🚀 WebsiteNow Desktop - AI Website Builder
 
 **Transform your ideas into professional websites using AI - No browser required!**
 
-KimiGPT Desktop is a standalone Python application that uses multiple AI agents to generate beautiful, production-ready websites from simple text descriptions.
+WebsiteNow Desktop is a standalone Python application that uses multiple AI agents to generate beautiful, production-ready websites from simple text descriptions.
 
 ![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
 ![Python](https://img.shields.io/badge/python-3.9+-green.svg)
@@ -52,7 +52,7 @@ KimiGPT Desktop is a standalone Python application that uses multiple AI agents 
 
 ### Quick Start
 
-1. **Download/Clone** this repository to `Z:\kimigpt`
+1. **Download/Clone** this repository to `Z:\websitenow`
 
 2. **Run Installation**:
    ```cmd
@@ -66,7 +66,7 @@ KimiGPT Desktop is a standalone Python application that uses multiple AI agents 
 
 3. **Get FREE API Keys** (see [API Configuration](#-api-configuration))
 
-4. **Launch KimiGPT**:
+4. **Launch WebsiteNow**:
    ```cmd
    Double-click startgpt.bat
    ```
@@ -79,7 +79,7 @@ That's it! 🎉
 
 ### Required APIs (All FREE!)
 
-KimiGPT works with **completely free AI APIs**. You need at least ONE API key to start.
+WebsiteNow works with **completely free AI APIs**. You need at least ONE API key to start.
 
 #### 🌟 Recommended (Get these first):
 
@@ -113,7 +113,7 @@ KimiGPT works with **completely free AI APIs**. You need at least ONE API key to
 
 ### Adding API Keys:
 
-1. Launch KimiGPT (`startgpt.bat`)
+1. Launch WebsiteNow (`startgpt.bat`)
 2. Click **"⚙️ API Settings"** tab
 3. For each API:
    - Click **"🔗 Get API Key"** to visit provider
@@ -131,7 +131,7 @@ KimiGPT works with **completely free AI APIs**. You need at least ONE API key to
 
 ### Basic Workflow
 
-1. **Launch** KimiGPT using `startgpt.bat`
+1. **Launch** WebsiteNow using `startgpt.bat`
 
 2. **Configure APIs** (first time only):
    - Go to "⚙️ API Settings" tab
@@ -185,7 +185,7 @@ design with gold accents and professional product displays.
 ## 📁 File Structure
 
 ```
-Z:\kimigpt\
+Z:\websitenow\
 ├── main.py                 # Main application entry point
 ├── installgpt.bat         # Installation script
 ├── startgpt.bat           # Launch script
@@ -343,7 +343,7 @@ Your generated website includes:
 
 ## 🔒 Privacy & Security
 
-- ✅ All API keys stored **locally only** (`Z:\kimigpt\config\config.json`)
+- ✅ All API keys stored **locally only** (`Z:\websitenow\config\config.json`)
 - ✅ No data sent to any server except AI providers
 - ✅ You maintain full control of your keys
 - ✅ Can delete keys anytime
@@ -410,14 +410,14 @@ Double-click: startgpt.bat
 python main.py
 
 # Output Location
-Z:\kimigpt\output\
+Z:\websitenow\output\
 
 # Config Location
-Z:\kimigpt\config\config.json
+Z:\websitenow\config\config.json
 ```
 
 ---
 
 **🎨 Happy Website Building!**
 
-*Generated with ❤️ by KimiGPT Team*
+*Generated with ❤️ by WebsiteNow Team*

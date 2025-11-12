@@ -1,20 +1,20 @@
 @echo off
-TITLE KimiGPT Desktop - AI Website Builder
+TITLE WebsiteNow - AI Website Builder
 COLOR 0B
 cls
 
 echo ═══════════════════════════════════════════════════════════════
-echo    KIMIGPT DESKTOP - AI WEBSITE BUILDER
+echo    WEBSITENOW - AI WEBSITE BUILDER
 echo ═══════════════════════════════════════════════════════════════
 echo.
-echo    🚀 Starting KimiGPT Desktop...
+echo    🚀 Starting WebsiteNow...
 echo.
 echo ═══════════════════════════════════════════════════════════════
 echo.
 timeout /t 1 >nul
 
-:: Change to script directory
-cd /d "%~dp0"
+:: Change to Z:\websitenow directory
+cd /d "Z:\websitenow"
 
 :: Check if Python is installed
 python --version >nul 2>&1
@@ -41,11 +41,11 @@ if errorlevel 1 (
 )
 
 :: Launch the application
-echo ✅ Launching KimiGPT Desktop...
+echo ✅ Launching WebsiteNow...
 echo.
 echo ═══════════════════════════════════════════════════════════════
 echo.
-echo    TIP: Don't close this window while using KimiGPT!
+echo    TIP: Don't close this window while using WebsiteNow!
 echo.
 echo    If you see any errors, they will appear here.
 echo.
@@ -58,7 +58,7 @@ python main.py
 if errorlevel 1 (
     echo.
     echo ═══════════════════════════════════════════════════════════════
-    echo    ❌ KimiGPT exited with an error
+    echo    ❌ WebsiteNow exited with an error
     echo ═══════════════════════════════════════════════════════════════
     echo.
     echo    Troubleshooting:
@@ -71,7 +71,7 @@ if errorlevel 1 (
 ) else (
     echo.
     echo ═══════════════════════════════════════════════════════════════
-    echo    👋 Thanks for using KimiGPT!
+    echo    👋 Thanks for using WebsiteNow!
     echo ═══════════════════════════════════════════════════════════════
     echo.
 )

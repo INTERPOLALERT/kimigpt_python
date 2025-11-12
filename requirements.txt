@@ -1,4 +1,4 @@
-# KimiGPT Desktop Application Requirements
+# WebsiteNow Desktop Application Requirements
 # Python 3.9+ required
 
 # GUI Framework

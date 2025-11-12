@@ -1,5 +1,5 @@
 """
-API Configuration Widget for KimiGPT
+API Configuration Widget for WebsiteNow
 Allows users to configure API keys for various AI services
 """
 

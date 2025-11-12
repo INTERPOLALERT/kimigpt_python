@@ -1,5 +1,5 @@
 """
-Generator Widget for KimiGPT
+Generator Widget for WebsiteNow
 Main website generation interface
 """
 

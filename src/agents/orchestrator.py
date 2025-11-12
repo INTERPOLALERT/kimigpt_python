@@ -1,5 +1,5 @@
 """
-Orchestrator Agent for KimiGPT - FIXED VERSION
+Orchestrator Agent for WebsiteNow
 Coordinates all other agents to generate websites
 """
 

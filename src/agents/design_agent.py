@@ -1,5 +1,5 @@
 """
-Design Agent for KimiGPT - FIXED VERSION
+Design Agent for WebsiteNow - FIXED VERSION
 Creates design specifications and visual guidelines
 """
 

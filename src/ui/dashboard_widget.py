@@ -1,5 +1,5 @@
 """
-Dashboard Widget for KimiGPT
+Dashboard Widget for WebsiteNow
 Shows overview, statistics, and quick actions
 """
 
@@ -289,7 +289,7 @@ class DashboardWidget(QWidget):
         layout.setSpacing(30)
 
         # Title
-        title = QLabel("Why Choose KimiGPT?")
+        title = QLabel("Why Choose WebsiteNow?")
         title.setObjectName("sectionTitle")
         title.setFont(QFont("Segoe UI", 24, QFont.Weight.Bold))
         title.setAlignment(Qt.AlignmentFlag.AlignCenter)

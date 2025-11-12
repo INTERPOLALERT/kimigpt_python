@@ -1,5 +1,5 @@
 """
-API Manager for KimiGPT - FIXED VERSION
+API Manager for WebsiteNow - FIXED VERSION
 Handles all AI API interactions with smart rotation and failover
 ONLY FREE-TIER APIs INCLUDED
 """
@@ -376,7 +376,7 @@ class APIManager:
             'Authorization': f'Bearer {api_config["key"]}',
             'Content-Type': 'application/json',
             'HTTP-Referer': 'http://localhost',
-            'X-Title': 'KimiGPT'
+            'X-Title': 'WebsiteNow'
         }
 
         data = {

@@ -1,5 +1,5 @@
 """
-Configuration Manager for KimiGPT
+Configuration Manager for WebsiteNow
 Handles loading and saving of configuration and API keys
 """
 
@@ -14,13 +14,8 @@ class ConfigManager:
     """Manage application configuration"""
 
     def __init__(self):
-        # Get the base directory where the app is installed
-        if getattr(sys, 'frozen', False):
-            # Running as compiled exe
-            self.base_dir = Path(sys.executable).parent
-        else:
-            # Running as script - go up from src/core to repo root
-            self.base_dir = Path(__file__).parent.parent.parent
+        # Use fixed base directory Z:\websitenow
+        self.base_dir = Path("Z:/websitenow")
 
         self.config_dir = self.base_dir / "config"
         self.config_file = self.config_dir / "config.json"
