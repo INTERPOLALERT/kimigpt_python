@@ -1,5 +1,5 @@
 """
-Main Window for KimiGPT Desktop Application
+Main Window for WebsiteNow Desktop Application
 """
 
 import os
@@ -29,7 +29,7 @@ class MainWindow(QMainWindow):
 
     def init_ui(self):
         """Initialize the user interface"""
-        self.setWindowTitle("KimiGPT - Multi-Agent AI Website Builder")
+        self.setWindowTitle("WebsiteNow - Multi-Agent AI Website Builder")
         self.setGeometry(100, 100, 1400, 900)
         self.setMinimumSize(1200, 800)
 
@@ -84,7 +84,7 @@ class MainWindow(QMainWindow):
 
         # Logo and title
         title_layout = QVBoxLayout()
-        title_label = QLabel("KimiGPT")
+        title_label = QLabel("WebsiteNow")
         title_label.setObjectName("appTitle")
         title_label.setFont(QFont("Segoe UI", 28, QFont.Weight.Bold))
 

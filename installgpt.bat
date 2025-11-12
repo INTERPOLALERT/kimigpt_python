@@ -1,21 +1,21 @@
 @echo off
-TITLE KimiGPT Desktop - Installation
+TITLE WebsiteNow - Installation
 COLOR 0A
 cls
 
 echo ═══════════════════════════════════════════════════════════════
-echo    KIMIGPT DESKTOP - INSTALLATION WIZARD
+echo    WEBSITENOW - INSTALLATION WIZARD
 echo ═══════════════════════════════════════════════════════════════
 echo.
-echo    Welcome to KimiGPT Desktop Installation!
+echo    Welcome to WebsiteNow Installation!
 echo    This will set up everything you need to start building websites with AI.
 echo.
 echo ═══════════════════════════════════════════════════════════════
 echo.
 timeout /t 2 >nul
 
-:: Change to script directory
-cd /d "%~dp0"
+:: Change to Z:\websitenow directory
+cd /d "Z:\websitenow"
 
 :: Check if Python is installed
 echo [1/5] Checking Python installation...
@@ -80,11 +80,11 @@ echo ✅ All packages installed successfully!
 echo.
 timeout /t 1 >nul
 
-:: Create directories
-echo [5/5] Setting up directories...
-if not exist "config" mkdir "config"
-if not exist "output" mkdir "output"
-if not exist "uploads" mkdir "uploads"
+:: Create directories at Z:\websitenow
+echo [5/5] Setting up directories at Z:\websitenow...
+if not exist "Z:\websitenow\config" mkdir "Z:\websitenow\config"
+if not exist "Z:\websitenow\output" mkdir "Z:\websitenow\output"
+if not exist "Z:\websitenow\uploads" mkdir "Z:\websitenow\uploads"
 echo ✅ Directories created!
 echo.
 
@@ -99,7 +99,7 @@ echo    1. Get your FREE API keys:
 echo       - Recommended: Groq, Gemini, Claude (all free!)
 echo       - Visit provider websites for API keys
 echo.
-echo    2. Launch KimiGPT:
+echo    2. Launch WebsiteNow:
 echo       - Double-click startgpt.bat
 echo       - Or run: python main.py
 echo.
@@ -115,6 +115,7 @@ echo       - Generate!
 echo.
 echo ═══════════════════════════════════════════════════════════════
 echo.
+echo    Installation location: Z:\websitenow
 echo    Ready to launch? Run startgpt.bat
 echo.
 echo ═══════════════════════════════════════════════════════════════

@@ -38,7 +38,7 @@
         "default_complexity": "moderate",
         "default_framework": "vanilla"
     },
-    "output_dir": "Z:\\kimigpt\\output",
-    "upload_dir": "Z:\\kimigpt\\uploads",
+    "output_dir": "Z:\\websitenow\\output",
+    "upload_dir": "Z:\\websitenow\\uploads",
     "version": "1.0.0"
 }

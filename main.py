@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-KimiGPT - Multi-Agent AI Website Builder (Desktop Version)
+WebsiteNow - Multi-Agent AI Website Builder (Desktop Version)
 A standalone desktop application for generating professional websites using AI
 """
 
@@ -20,8 +20,8 @@ def main():
 
     # Create application
     app = QApplication(sys.argv)
-    app.setApplicationName("KimiGPT")
-    app.setOrganizationName("KimiGPT")
+    app.setApplicationName("WebsiteNow")
+    app.setOrganizationName("WebsiteNow")
     app.setStyle("Fusion")
 
     # Set default font

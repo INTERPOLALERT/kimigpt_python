@@ -1,3 +1,3 @@
 """
-UI Components for KimiGPT
+UI Components for WebsiteNow
 """

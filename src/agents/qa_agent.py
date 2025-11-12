@@ -1,5 +1,5 @@
 """
-QA Agent for KimiGPT - FIXED VERSION
+QA Agent for WebsiteNow - FIXED VERSION
 Validates and tests generated code
 """
 

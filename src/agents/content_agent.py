@@ -1,5 +1,5 @@
 """
-Content Agent for KimiGPT - FIXED VERSION
+Content Agent for WebsiteNow - FIXED VERSION
 Generates website content (text, copy, descriptions)
 """
 
