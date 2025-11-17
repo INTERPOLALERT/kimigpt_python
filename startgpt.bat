@@ -13,8 +13,8 @@ echo ═════════════════════════
 echo.
 timeout /t 1 >nul
 
-:: Change to Z:\websitenow directory
-cd /d "Z:\websitenow"
+:: Change to script directory (where the Python files are)
+cd /d "%~dp0"
 
 :: Check if Python is installed
 python --version >nul 2>&1

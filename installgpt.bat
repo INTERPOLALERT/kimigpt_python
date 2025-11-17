@@ -14,8 +14,8 @@ echo ═════════════════════════
 echo.
 timeout /t 2 >nul
 
-:: Change to Z:\websitenow directory
-cd /d "Z:\websitenow"
+:: Change to script directory (where the Python files are)
+cd /d "%~dp0"
 
 :: Check if Python is installed
 echo [1/5] Checking Python installation...
@@ -115,7 +115,8 @@ echo       - Generate!
 echo.
 echo ═══════════════════════════════════════════════════════════════
 echo.
-echo    Installation location: Z:\websitenow
+echo    Data will be stored at: Z:\websitenow
+echo    Application files are in: %CD%
 echo    Ready to launch? Run startgpt.bat
 echo.
 echo ═══════════════════════════════════════════════════════════════
